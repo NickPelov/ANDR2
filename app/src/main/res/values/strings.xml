@@ -2,9 +2,11 @@
     <string name="app_name">Android2</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_main">Main</string>
+    <string name="title_activity_profile">Profile</string>
     <string name="button_login">log in</string>
     <string name="button_load_map">load map</string>
     <string name="button_back">back</string>
+    <string name="go_to_profile">go to profile</string>
     <string name="facebook_app_id">227680917723584</string>
     <string name="fb_login_protocol_scheme">fb227680917723584</string>
 </resources>
