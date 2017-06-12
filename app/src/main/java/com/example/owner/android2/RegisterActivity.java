@@ -1,238 +1,443 @@
 package com.example.owner.android2;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.RequiresPermission;
-import android.support.design.widget.FloatingActionButton;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ButtonBarLayout;
-import android.support.v7.widget.ListPopupWindow;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.app.LoaderManager.LoaderCallbacks;
+
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class RegisterActivity extends AppCompatActivity {
+import static android.Manifest.permission.READ_CONTACTS;
 
-    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+/**
+ * A login screen that offers login via email/password.
+ */
+public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    private EditText NameTextField;
-    private EditText NickNameTextField;
-    private EditText EmailTextField;
-    private EditText PasswordTextField;
+    /**
+     * Id to identity READ_CONTACTS permission request.
+     */
+    private static final int REQUEST_READ_CONTACTS = 0;
 
-    private String name, email, password, nickName;
+    /**
+     * Keep track of the login task to ensure we can cancel it if requested.
+     */
+    private UserRegisterTask mAuthTask = null;
 
-    private List<User> users = new ArrayList<>();
+    // UI references.
+    private AutoCompleteTextView mEmailView;
+    private EditText mNickNameView;
+    private EditText mNameView;
+    private EditText mPasswordView;
+    private View mProgressView;
+    private View mRegisterFormView;
+    private View View2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        users = new ArrayList<>();
-
-        //assigning the Inputs
-        NameTextField = (EditText) findViewById(R.id.NameText);
-        EmailTextField = (EditText) findViewById(R.id.EmailText);
-        PasswordTextField = (EditText) findViewById(R.id.PasswordText);
-        NickNameTextField = (EditText) findViewById(R.id.NickNameText);
-
-        final Button registerButton = (Button) findViewById(R.id.RegisterButton);
-
-        //loading fireBaseDB
-        LoadFromDB();
-
-        //setting the register button
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        // Set up the login form.
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        populateAutoComplete();
+        mNameView = (EditText) findViewById(R.id.NameText);
+        mNickNameView = (EditText) findViewById(R.id.NickNameText);
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                registerInDB(v);
-            }
-        });
-    }
-
-    /**
-     * handling the registration in the "Form"
-     *
-     * @param v passing it to gotoLogin method
-     */
-    private void registerInDB(View v) {
-
-        name = NameTextField.getText().toString();
-        email = EmailTextField.getText().toString();
-        password = PasswordTextField.getText().toString();
-        nickName = NickNameTextField.getText().toString();
-
-        View focusView = null;
-        View focusView2 = null;
-        //check if name is filled in
-        if (name.equals(null) || name.equals("")) {
-            NameTextField.setError("Pease fill in");
-            focusView = NameTextField;
-            focusView.requestFocus();
-            return;
-        }
-        //check if email is filled in
-        if (email.equals(null) || email.equals("")) {
-            EmailTextField.setError("Pease fill in");
-            focusView = EmailTextField;
-            focusView.requestFocus();
-            return;
-        }
-        //check if nickName is filled in
-        if (nickName.equals(null) || nickName.equals("")) {
-            NickNameTextField.setError("Pease fill in");
-            focusView = NickNameTextField;
-            focusView.requestFocus();
-            return;
-        }
-        //validates password and email
-        if (!isPasswordValid(password) && !isEmailValid(email)) {
-            PasswordTextField.setError(getString(R.string.error_invalid_password));
-            focusView = PasswordTextField;
-            focusView.requestFocus();
-            EmailTextField.setError(getString(R.string.error_invalid_email));
-            focusView2 = EmailTextField;
-            focusView2.requestFocus();
-            return;
-        }
-        //validates password
-        if (!isPasswordValid(password)) {
-            PasswordTextField.setError(getString(R.string.error_invalid_password));
-            focusView = PasswordTextField;
-            focusView.requestFocus();
-            return;
-        }
-        //validates email
-        if (!isEmailValid(email)) {
-            EmailTextField.setError(getString(R.string.error_invalid_email));
-            focusView = EmailTextField;
-            focusView.requestFocus();
-            return;
-        }
-        //checks if the "user" is already in the DB
-        if (isRegistered()) {
-            return;
-        }
-        //registers the User
-        else {
-            pushNewInstance(name, email, password, nickName);
-            gotoLogin(v);
-        }
-    }
-
-    /**
-     * initi. login activity
-     *
-     * @param view
-     */
-    public void gotoLogin(View view) {
-        Intent innt = new Intent(this, LoginActivity.class);
-        startActivity(innt);
-    }
-
-    /**
-     * Loading objects from the fireDB
-     * and filling the users list
-     */
-    private void LoadFromDB() {
-
-        mRootRef.child("users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snap : dataSnapshot.getChildren()
-                        ) {
-                    String name = snap.child("Name").getValue(String.class);
-                    String email = snap.child("Email").getValue(String.class);
-                    String nickname = snap.child("NickName").getValue(String.class);
-                    String pass = snap.child("Password").getValue(String.class);
-                    Double lati = snap.child("location").child("Latitude").getValue(Double.class);
-                    Double longi = snap.child("location").child("Longitude").getValue(Double.class);
-
-                    users.add(new User(name, email, nickname, pass, new location(lati, longi)));
-
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                return false;
             }
         });
+
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View2 = view;
+                attemptLogin();
+            }
+        });
+
+        mRegisterFormView = findViewById(R.id.register_form);
+        mProgressView = findViewById(R.id.login_progress);
     }
 
-    /**
-     * loops through the list with users and checks if they are
-     * present with eighter Email or nickName
-     *
-     * @return
-     */
-    private boolean isRegistered() {
-        for (User user : users
-                ) {
-            if (user.Email.equals(email)) {
-                EmailTextField.setError("Email already in use");
-                return true;
-            }
-            if (user.NickName.equals(nickName)) {
-                NickNameTextField.setError("Nick name already in use");
-                return true;
-            }
+    private void populateAutoComplete() {
+        if (!mayRequestContacts()) {
+            return;
+        }
+
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    private boolean mayRequestContacts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
         }
         return false;
     }
 
     /**
-     * pushing a new instance to the fireDB through the params:
-     *
-     * @param name
-     * @param email
-     * @param password
-     * @param nickName
+     * Callback received when a permissions request has been completed.
      */
-    private void pushNewInstance(String name, String email, String password, String nickName) {
-        try {
-            DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-            DatabaseReference usersTable = mRootRef.child("users").push();
-            String pushId = usersTable.getKey();
-            usersTable.setValue(new User(name, email, nickName, password, new location(0, 0)));
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_READ_CONTACTS) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                populateAutoComplete();
+            }
         }
     }
 
+
     /**
-     * validating the password input
-     *
-     * @param password if is more than 6 symbols
-     * @return
+     * Attempts to sign in or register the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
      */
+    private void attemptLogin() {
+        if (mAuthTask != null) {
+            return;
+        }
+
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+        mNickNameView.setError(null);
+        mNameView.setError(null);
+
+        // Store values at the time of the login attempt.
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+        String nickName = mNickNameView.getText().toString();
+        String name = mNameView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        //check if name is filled in
+        if (TextUtils.isEmpty(nickName)) {
+            mNickNameView.setError("Please fill in");
+            focusView = mNickNameView;
+            cancel = true;
+        }
+        //check if name is filled in
+        if (TextUtils.isEmpty(name)) {
+            mNameView.setError("Please fill in");
+            focusView = mNameView;
+            cancel = true;
+        }
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError("Please input more than 5 symbols");
+            focusView = mPasswordView;
+            cancel = true;
+        }
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgress(true);
+            mAuthTask = new UserRegisterTask(name, nickName, email, password);
+            mAuthTask.execute((Void) null);
+        }
+    }
+
+    private boolean isEmailValid(String email) {
+        //TODO: Replace this with your own logic
+        return email.contains("@");
+    }
+
     private boolean isPasswordValid(String password) {
-        return password.length() > 6;
+        //TODO: Replace this with your own logic
+        return password.length() > 5;
     }
 
     /**
-     * validating if the email contains "@" which proposes for a currect email
-     *
-     * @param email
-     * @return
+     * Shows the progress UI and hides the login form.
      */
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new CursorLoader(this,
+                // Retrieve data rows for the device user's 'profile' contact.
+                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
+                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+
+                // Select only email addresses.
+                ContactsContract.Contacts.Data.MIMETYPE +
+                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
+                .CONTENT_ITEM_TYPE},
+
+                // Show primary email addresses first. Note that there won't be
+                // a primary email address if the user hasn't specified one.
+                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        List<String> emails = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+            cursor.moveToNext();
+        }
+
+        addEmailsToAutoComplete(emails);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+
+    }
+
+    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(RegisterActivity.this,
+                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+
+        mEmailView.setAdapter(adapter);
+    }
+
+
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
+
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
+
+        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+        private final String mEmail;
+        private final String mNick;
+        private final String mName;
+        private final String mPassword;
+        List<User> users;
+        int i = 0;
+        int ii = 0;
+
+        UserRegisterTask(String name, String nick, String email, String password) {
+            mEmail = email;
+            mPassword = password;
+            mName = name;
+            mNick = nick;
+            users = new ArrayList<>();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            try {
+                LoadFromDB();
+                // Simulate network access.
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                return false;
+            }
+            for (User user : users) {
+                if (user.Email.equals(mEmail)) {
+                    i = 2;
+                }
+                if (user.NickName.equals(mNick)) {
+                    ii = 2;
+                }
+            }
+            if (ii == 2 && i == 2) {
+                return false;
+            } else if (ii != 2 && i != 2) {
+                return true;
+            } else return false;
+
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            showProgress(false);
+
+            if (i == 2 && ii == 2) {
+                mEmailView.setError("Email already taken");
+                mEmailView.requestFocus();
+                mNickNameView.setError("Nick name already taken");
+                mNickNameView.requestFocus();
+            } else if (i == 2) {
+                mEmailView.setError("Email already taken");
+                mEmailView.requestFocus();
+            } else if (ii == 2) {
+                mNickNameView.setError("Nick name already taken");
+                mNickNameView.requestFocus();
+            } else {
+                pushNewInstance(mName, mEmail, mPassword, mNick);
+                finish();
+                gotoLogin(View2);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
+        }
+
+        private void LoadFromDB() {
+
+            mRootRef.child("users").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snap : dataSnapshot.getChildren()
+                            ) {
+                        String name = snap.child("Name").getValue(String.class);
+                        String email = snap.child("Email").getValue(String.class);
+                        String nickname = snap.child("NickName").getValue(String.class);
+                        String pass = snap.child("Password").getValue(String.class);
+                        Double lati = snap.child("location").child("Latitude").getValue(Double.class);
+                        Double longi = snap.child("location").child("Longitude").getValue(Double.class);
+
+                        users.add(new User(name, email, nickname, pass, new location(lati, longi)));
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+
+        /**
+         * pushing a new instance to the fireDB through the params:
+         *
+         * @param name
+         * @param email
+         * @param password
+         * @param nickName
+         */
+        private void pushNewInstance(String name, String email, String password, String nickName) {
+            try {
+                DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference usersTable = mRootRef.child("users").push();
+                String pushId = usersTable.getKey();
+                usersTable.setValue(new User(name, email, nickName, password, new location(0, 0)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //going to the profile
+    public void gotoLogin(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }
+
