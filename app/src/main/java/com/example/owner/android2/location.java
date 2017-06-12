@@ -8,7 +8,7 @@ public class location {
     public double Longitude;
     public double Latitude;
 
-    public location(double latitude,double longitude){
+    public location(double latitude, double longitude) {
         this.Latitude = latitude;
         this.Longitude = longitude;
     }

@@ -28,14 +28,16 @@ import java.util.List;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
-    public static boolean isfound = false;
+
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    private int userId;
-    private EditText Name;
-    private EditText NickName;
-    private EditText Email;
-    private EditText Password;
+
+    private EditText NameTextField;
+    private EditText NickNameTextField;
+    private EditText EmailTextField;
+    private EditText PasswordTextField;
+
     private String name, email, password, nickName;
+
     private List<User> users = new ArrayList<>();
 
     @Override
@@ -44,14 +46,19 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         users = new ArrayList<>();
-        Name = (EditText) findViewById(R.id.NameText);
-        Email = (EditText) findViewById(R.id.EmailText);
-        Password = (EditText) findViewById(R.id.PasswordText);
-        NickName = (EditText) findViewById(R.id.NickNameText);
+
+        //assigning the Inputs
+        NameTextField = (EditText) findViewById(R.id.NameText);
+        EmailTextField = (EditText) findViewById(R.id.EmailText);
+        PasswordTextField = (EditText) findViewById(R.id.PasswordText);
+        NickNameTextField = (EditText) findViewById(R.id.NickNameText);
+
         final Button registerButton = (Button) findViewById(R.id.RegisterButton);
 
+        //loading fireBaseDB
         LoadFromDB();
 
+        //setting the register button
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,41 +67,90 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * handling the registration in the "Form"
+     *
+     * @param v passing it to gotoLogin method
+     */
     private void registerInDB(View v) {
-        name = Name.getText().toString();
-        email = Email.getText().toString();
-        password = Password.getText().toString();
-        nickName = NickName.getText().toString();
 
+        name = NameTextField.getText().toString();
+        email = EmailTextField.getText().toString();
+        password = PasswordTextField.getText().toString();
+        nickName = NickNameTextField.getText().toString();
+
+        View focusView = null;
+        View focusView2 = null;
+        //check if name is filled in
         if (name.equals(null) || name.equals("")) {
-            Name.setError("Pease fill in");
+            NameTextField.setError("Pease fill in");
+            focusView = NameTextField;
+            focusView.requestFocus();
             return;
         }
+        //check if email is filled in
         if (email.equals(null) || email.equals("")) {
-            Email.setError("Pease fill in");
+            EmailTextField.setError("Pease fill in");
+            focusView = EmailTextField;
+            focusView.requestFocus();
             return;
         }
-        if (password.equals(null) || password.equals("")) {
-            Password.setError("Pease fill in");
-            return;
-        }
+        //check if nickName is filled in
         if (nickName.equals(null) || nickName.equals("")) {
-            NickName.setError("Pease fill in");
+            NickNameTextField.setError("Pease fill in");
+            focusView = NickNameTextField;
+            focusView.requestFocus();
             return;
         }
+        //validates password and email
+        if (!isPasswordValid(password) && !isEmailValid(email)) {
+            PasswordTextField.setError(getString(R.string.error_invalid_password));
+            focusView = PasswordTextField;
+            focusView.requestFocus();
+            EmailTextField.setError(getString(R.string.error_invalid_email));
+            focusView2 = EmailTextField;
+            focusView2.requestFocus();
+            return;
+        }
+        //validates password
+        if (!isPasswordValid(password)) {
+            PasswordTextField.setError(getString(R.string.error_invalid_password));
+            focusView = PasswordTextField;
+            focusView.requestFocus();
+            return;
+        }
+        //validates email
+        if (!isEmailValid(email)) {
+            EmailTextField.setError(getString(R.string.error_invalid_email));
+            focusView = EmailTextField;
+            focusView.requestFocus();
+            return;
+        }
+        //checks if the "user" is already in the DB
         if (isRegistered()) {
             return;
-        } else {
+        }
+        //registers the User
+        else {
             pushNewInstance(name, email, password, nickName);
-            gotoProfile(v);
+            gotoLogin(v);
         }
     }
 
-    public void gotoProfile(View view) {
-        Intent innt = new Intent(this, ProfileActivity.class);
+    /**
+     * initi. login activity
+     *
+     * @param view
+     */
+    public void gotoLogin(View view) {
+        Intent innt = new Intent(this, LoginActivity.class);
         startActivity(innt);
     }
 
+    /**
+     * Loading objects from the fireDB
+     * and filling the users list
+     */
     private void LoadFromDB() {
 
         mRootRef.child("users").addValueEventListener(new ValueEventListener() {
@@ -120,21 +176,35 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * loops through the list with users and checks if they are
+     * present with eighter Email or nickName
+     *
+     * @return
+     */
     private boolean isRegistered() {
         for (User user : users
                 ) {
             if (user.Email.equals(email)) {
-                Email.setError("Email already in use");
+                EmailTextField.setError("Email already in use");
                 return true;
             }
             if (user.NickName.equals(nickName)) {
-                NickName.setError("Nick name already in use");
+                NickNameTextField.setError("Nick name already in use");
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * pushing a new instance to the fireDB through the params:
+     *
+     * @param name
+     * @param email
+     * @param password
+     * @param nickName
+     */
     private void pushNewInstance(String name, String email, String password, String nickName) {
         try {
             DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -144,5 +214,25 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * validating the password input
+     *
+     * @param password if is more than 6 symbols
+     * @return
+     */
+    private boolean isPasswordValid(String password) {
+        return password.length() > 6;
+    }
+
+    /**
+     * validating if the email contains "@" which proposes for a currect email
+     *
+     * @param email
+     * @return
+     */
+    private boolean isEmailValid(String email) {
+        return email.contains("@");
     }
 }

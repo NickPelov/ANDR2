@@ -9,16 +9,17 @@ import java.util.List;
  */
 
 public class User {
-        public String Name;
-        public String Email;
-        public String NickName;
-        public String Password;
-        public location location;
-        public User(String name,String email, String nickname, String password ,location location){
-            this.Name = name;
-            this.Email = email;
-            this.NickName = nickname;
-            this.Password = password;
-            this.location = location;
-        }
+    public String Name;
+    public String Email;
+    public String NickName;
+    public String Password;
+    public location location;
+
+    public User(String name, String email, String nickname, String password, location location) {
+        this.Name = name;
+        this.Email = email;
+        this.NickName = nickname;
+        this.Password = password;
+        this.location = location;
+    }
 }

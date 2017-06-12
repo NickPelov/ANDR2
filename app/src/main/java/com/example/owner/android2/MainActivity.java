@@ -41,50 +41,55 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (CurrentUser.getLogged()) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        } else {
+            loginButton = (LoginButton) findViewById(R.id.login_button);
+            callbackManager = CallbackManager.Factory.create();
+            profilePictureView = (ProfilePictureView) findViewById(R.id.image);
+            profilePictureView.setVisibility(View.INVISIBLE);
 
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        callbackManager = CallbackManager.Factory.create();
-        profilePictureView = (ProfilePictureView) findViewById(R.id.image);
-        profilePictureView.setVisibility(View.INVISIBLE);
+            LoginManager.getInstance().registerCallback(callbackManager,
+                    new FacebookCallback<LoginResult>() {
+                        @Override
+                        public void onSuccess(LoginResult loginResult) {
+                            Toast.makeText(MainActivity.this, "User ID : " + loginResult.getAccessToken()
+                                    .getUserId(), Toast.LENGTH_LONG).show();
 
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Toast.makeText(MainActivity.this, "User ID : " + loginResult.getAccessToken().getUserId(), Toast.LENGTH_LONG).show();
-
-                        GraphRequest request = GraphRequest.newMeRequest(
-                                loginResult.getAccessToken(),
-                                new GraphRequest.GraphJSONObjectCallback() {
-                                    @Override
-                                    public void onCompleted(
-                                            JSONObject object,
-                                            GraphResponse response) {
-                                        try {
-                                            String id  = String.valueOf(object.getString("id"));
-                                            profilePictureView.setProfileId(id);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                            GraphRequest request = GraphRequest.newMeRequest(
+                                    loginResult.getAccessToken(),
+                                    new GraphRequest.GraphJSONObjectCallback() {
+                                        @Override
+                                        public void onCompleted(
+                                                JSONObject object,
+                                                GraphResponse response) {
+                                            try {
+                                                String id = String.valueOf(object.getString("id"));
+                                                profilePictureView.setProfileId(id);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
-                                    }
-                                });
-                        profilePictureView.setVisibility(View.VISIBLE);
-                        Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id,name,link,email,picture");
-                        request.setParameters(parameters);
-                        request.executeAsync();
-                    }
+                                    });
+                            profilePictureView.setVisibility(View.VISIBLE);
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields", "id,name,link,email,picture");
+                            request.setParameters(parameters);
+                            request.executeAsync();
+                        }
 
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
+                        @Override
+                        public void onCancel() {
+                            // App code
+                        }
 
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Toast.makeText(MainActivity.this, "An error occured", Toast.LENGTH_LONG).show();
-                    }
-                });
+                        @Override
+                        public void onError(FacebookException exception) {
+                            Toast.makeText(MainActivity.this, "An error occured", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
     }
 
     //loading the map
@@ -92,10 +97,22 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
+
     public void Register(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * initi. login activity
+     *
+     * @param view
+     */
+    public void loadLogin(View view) {
+        Intent innt = new Intent(this, LoginActivity.class);
+        startActivity(innt);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
