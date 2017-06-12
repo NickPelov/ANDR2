@@ -1,24 +1,9 @@
 package com.example.owner.android2;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
 
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.login.widget.ProfilePictureView;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Created by Owner on 6/4/2017.
@@ -29,9 +14,9 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_facebook);
+        setContentView(R.layout.activity_profile);
 
-        ProfilePictureView profilePictureView = (ProfilePictureView) findViewById(R.id.image);
+
         //        profilePictureView.setProfileId(profile.getId());
 //        Bundle params = new Bundle();
 //        params.putString("fields", "id,email,gender,cover,picture.type(large)");

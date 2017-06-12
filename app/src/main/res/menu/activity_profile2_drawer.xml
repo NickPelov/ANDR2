@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/map_option"
+            android:icon="@mipmap/compass"
+            android:title="Map" />
+        <item
+            android:id="@+id/achievements_option"
+            android:icon="@drawable/achievements"
+            android:title="Achievements" />
+        <item
+            android:id="@+id/events_option"
+            android:icon="@mipmap/events"
+            android:title="Events" />
+        <item
+            android:id="@+id/settings_option"
+            android:icon="@mipmap/settings"
+            android:title="Settings" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+        </menu>
+    </item>
+
+</menu>

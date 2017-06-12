@@ -70,10 +70,26 @@
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:label="Register"/>
+            android:label="Register" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
+        <activity
+            android:name=".ProfileActivity2"
+            android:label="@string/title_activity_profile2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AchivementsActivity"
+            android:label="@string/title_activity_achivements"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EventsActivity"
+            android:label="@string/title_activity_events"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

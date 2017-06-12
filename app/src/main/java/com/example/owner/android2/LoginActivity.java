@@ -315,7 +315,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                LoadFromDB();
+                FireBaseConnection.LoadFromDB(users);
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -347,6 +347,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 mEmailView.setError(getString(R.string.error_invalid_email));
                 mEmailView.requestFocus();
             } else if (success) {
+
                 CurrentUser.setLogged(true);
                 finish();
                 goToProfile(View2);
@@ -361,36 +362,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
-
-        private void LoadFromDB() {
-
-            mRootRef.child("users").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snap : dataSnapshot.getChildren()
-                            ) {
-                        String name = snap.child("Name").getValue(String.class);
-                        String email = snap.child("Email").getValue(String.class);
-                        String nickname = snap.child("NickName").getValue(String.class);
-                        String pass = snap.child("Password").getValue(String.class);
-                        Double lati = snap.child("location").child("Latitude").getValue(Double.class);
-                        Double longi = snap.child("location").child("Longitude").getValue(Double.class);
-
-                        users.add(new User(name, email, nickname, pass, new location(lati, longi)));
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
     }
 
     //going to the profile
     public void goToProfile(View view) {
-        Intent intent = new Intent(this, ProfileActivity.class);
+        Intent intent = new Intent(this, ProfileActivity2.class);
         startActivity(intent);
     }
 }

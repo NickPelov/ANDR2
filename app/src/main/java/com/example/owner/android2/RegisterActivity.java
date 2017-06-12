@@ -316,7 +316,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      */
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
-        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+
         private final String mEmail;
         private final String mNick;
         private final String mName;
@@ -338,7 +338,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             // TODO: attempt authentication against a network service.
 
             try {
-                LoadFromDB();
+                FireBaseConnection.LoadFromDB(users);
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -377,7 +377,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 mNickNameView.setError("Nick name already taken");
                 mNickNameView.requestFocus();
             } else {
-                pushNewInstance(mName, mEmail, mPassword, mNick);
+                FireBaseConnection.pushNewInstanceUser(mName, mEmail, mPassword, mNick);
                 finish();
                 gotoLogin(View2);
             }
@@ -387,50 +387,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
-        }
-
-        private void LoadFromDB() {
-
-            mRootRef.child("users").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snap : dataSnapshot.getChildren()
-                            ) {
-                        String name = snap.child("Name").getValue(String.class);
-                        String email = snap.child("Email").getValue(String.class);
-                        String nickname = snap.child("NickName").getValue(String.class);
-                        String pass = snap.child("Password").getValue(String.class);
-                        Double lati = snap.child("location").child("Latitude").getValue(Double.class);
-                        Double longi = snap.child("location").child("Longitude").getValue(Double.class);
-
-                        users.add(new User(name, email, nickname, pass, new location(lati, longi)));
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-
-        /**
-         * pushing a new instance to the fireDB through the params:
-         *
-         * @param name
-         * @param email
-         * @param password
-         * @param nickName
-         */
-        private void pushNewInstance(String name, String email, String password, String nickName) {
-            try {
-                DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-                DatabaseReference usersTable = mRootRef.child("users").push();
-                String pushId = usersTable.getKey();
-                usersTable.setValue(new User(name, email, nickName, password, new location(0, 0)));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 

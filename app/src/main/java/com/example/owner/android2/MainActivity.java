@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             loginButton = (LoginButton) findViewById(R.id.login_button);
             callbackManager = CallbackManager.Factory.create();
-            profilePictureView = (ProfilePictureView) findViewById(R.id.image);
-            profilePictureView.setVisibility(View.INVISIBLE);
 
             LoginManager.getInstance().registerCallback(callbackManager,
                     new FacebookCallback<LoginResult>() {
