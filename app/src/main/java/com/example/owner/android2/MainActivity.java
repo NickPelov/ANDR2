@@ -1,7 +1,9 @@
 package com.example.owner.android2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     public void loadMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void Register(View view) {
@@ -118,5 +121,18 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ProfileActivity2.class);
             startActivity(intent);
         }
+    }
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Really Exit?")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                                MainActivity.super.onBackPressed();
+                    }
+                }).create().show();
     }
 }

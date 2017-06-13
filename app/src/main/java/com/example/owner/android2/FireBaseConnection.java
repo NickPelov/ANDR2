@@ -26,10 +26,11 @@ public class FireBaseConnection {
                     String email = snap.child("Email").getValue(String.class);
                     String nickname = snap.child("NickName").getValue(String.class);
                     String pass = snap.child("Password").getValue(String.class);
+                    int score = snap.child("Score").getValue(Integer.class);
                     Double lati = snap.child("location").child("Latitude").getValue(Double.class);
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
 
-                    users.add(new User(name, email, nickname, pass, new location(lati, longi)));
+                    users.add(new User(name, email, nickname, pass,score, new location(lati, longi)));
 
                 }
             }
@@ -53,7 +54,7 @@ public class FireBaseConnection {
             DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
             DatabaseReference usersTable = mRootRef.child("users").push();
             String pushId = usersTable.getKey();
-            usersTable.setValue(new User(name, email, nickName, password, new location(0, 0)));
+            usersTable.setValue(new User(name, email, nickName, password,0, new location(0, 0)));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,10 +73,11 @@ public class FireBaseConnection {
                     String email = snap.child("Email").getValue(String.class);
                     String nickname = snap.child("NickName").getValue(String.class);
                     String pass = snap.child("Password").getValue(String.class);
+                    int score = snap.child("Score").getValue(Integer.class);
                     Double lati = snap.child("location").child("Latitude").getValue(Double.class);
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
                     if (nickName1.equals(nickname) && email1.equals(email)) {
-                        user[0] = new User(name, email, nickname, pass, new location(lati, longi));
+                        user[0] = new User(name, email, nickname, pass,score, new location(lati, longi));
                     }
 
                 }

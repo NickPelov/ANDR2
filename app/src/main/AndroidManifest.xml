@@ -86,6 +86,10 @@
         <activity
             android:name=".EventsActivity"
             android:label="@string/title_activity_events"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LeaderboardActivity"
+            android:label="@string/title_activity_leaderboard"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

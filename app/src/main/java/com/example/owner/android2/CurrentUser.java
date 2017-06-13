@@ -15,6 +15,9 @@ public class CurrentUser {
     public static boolean getLogged() {
         return isLogged;
     }
+    public static void setUsertoNull(){
+        user = null;
+    }
 
     public static User getUser() {
         return user;

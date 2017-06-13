@@ -11,6 +11,10 @@
             android:icon="@mipmap/achievements_2"
             android:title="Achievements" />
         <item
+        android:id="@+id/leaderboard_option"
+        android:icon="@mipmap/leaderboard"
+        android:title="Leaderboard" />
+        <item
             android:id="@+id/events_option"
             android:icon="@mipmap/event_2"
             android:title="Events" />

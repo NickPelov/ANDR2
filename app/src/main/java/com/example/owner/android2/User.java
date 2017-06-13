@@ -13,13 +13,15 @@ public class User {
     public String Email;
     public String NickName;
     public String Password;
+    public int Score;
     public location location;
 
-    public User(String name, String email, String nickname, String password, location location) {
+    public User(String name, String email, String nickname, String password,int score, location location) {
         this.Name = name;
         this.Email = email;
         this.NickName = nickname;
         this.Password = password;
         this.location = location;
+        this.Score = score;
     }
 }

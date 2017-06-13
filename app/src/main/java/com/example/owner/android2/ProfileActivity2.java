@@ -1,9 +1,11 @@
 package com.example.owner.android2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -57,16 +59,6 @@ public class ProfileActivity2 extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.profile_activity2, menu);
@@ -100,17 +92,23 @@ public class ProfileActivity2 extends AppCompatActivity
             gotoAchiv(view2);
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);
-        } else if (id == R.id.exit_option) {
-            CurrentUser.setLogged(false);
-            CurrentUser.setUser(null);
-            gotoMain(view2);
+        }
+        else if (id == R.id.leaderboard_option) {
+            gotoLeaderBoard(view2);
+        }else if (id == R.id.exit_option) {
+            logoutFromProfile();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
 
+    }
+    //going to the leaderboard
+    public void gotoLeaderBoard(View view) {
+        Intent intent = new Intent(this, LeaderboardActivity.class);
+        startActivity(intent);
+    }
     //going to the map
     public void gotoMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
@@ -145,5 +143,28 @@ public class ProfileActivity2 extends AppCompatActivity
     public void gotoMain(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        logoutFromProfile();
+    }
+    public void logoutFromProfile(){
+
+        new AlertDialog.Builder(this)
+                .setTitle("Really Log out?")
+                .setMessage("Are you sure you want to log out?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CurrentUser.setLogged(false);
+                        CurrentUser.setUsertoNull();
+                        ProfileActivity2.super.onBackPressed();
+                    }
+                }).create().show();
     }
 }
