@@ -12,12 +12,12 @@
         tools:context="com.example.owner.android2.MapsActivity" />
 
     <Button
+        android:id="@+id/buttonBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
-        android:onClick="goBackToMain"
         android:text="@string/button_back"
         android:textColor="@color/text_in_button" />
 </RelativeLayout>
