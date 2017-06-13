@@ -4,28 +4,32 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/map_option"
-            android:icon="@mipmap/compass"
+            android:icon="@mipmap/map_1"
             android:title="Map" />
         <item
             android:id="@+id/achievements_option"
-            android:icon="@drawable/achievements"
+            android:icon="@mipmap/achievements_2"
             android:title="Achievements" />
         <item
             android:id="@+id/events_option"
-            android:icon="@mipmap/events"
+            android:icon="@mipmap/event_2"
             android:title="Events" />
-        <item
-            android:id="@+id/settings_option"
-            android:icon="@mipmap/settings"
-            android:title="Settings" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Profile">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/profile_option"
+                android:icon="@mipmap/user_pic_2"
+                android:title="Info" />
+            <item
+            android:id="@+id/settings_option"
+            android:icon="@mipmap/settings_2"
+            android:title="Settings" />
+            <item
+                android:id="@+id/exit_option"
+                android:icon="@mipmap/exit_door"
+                android:title="Log out" />
         </menu>
     </item>
 

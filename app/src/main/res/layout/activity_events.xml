@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:layout_gravity="center"
     tools:openDrawer="start">
 
     <include
@@ -19,7 +20,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_events"
-        app:menu="@menu/activity_events_drawer" />
+        app:menu="@menu/activity_profile2_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

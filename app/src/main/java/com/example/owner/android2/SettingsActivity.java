@@ -1,5 +1,6 @@
 package com.example.owner.android2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 
 public class SettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private View view2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class SettingsActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view2 = view;
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -39,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -80,22 +84,60 @@ public class SettingsActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.map_option) {
+            gotoMap(view2);
+        } else if (id == R.id.events_option) {
+            gotoEvents(view2);
+        } else if (id == R.id.settings_option) {
+            gotoSettings(view2);
+        } else if (id == R.id.achievements_option) {
+            gotoAchiv(view2);
+        } else if (id == R.id.profile_option) {
+            gotoProfile(view2);
+        } else if (id == R.id.exit_option) {
+            CurrentUser.setLogged(false);
+            CurrentUser.setUser(null);
+            gotoMain(view2);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    //going to the map
+    public void gotoMap(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
+
+    //going to the achievements
+    public void gotoAchiv(View view) {
+        Intent intent = new Intent(this, AchivementsActivity.class);
+        startActivity(intent);
+    }
+
+    //going to the settings
+    public void gotoSettings(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    //going to the events
+    public void gotoEvents(View view) {
+        Intent intent = new Intent(this, EventsActivity.class);
+        startActivity(intent);
+    }
+
+    //going to the profile
+    public void gotoProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity2.class);
+        startActivity(intent);
+    }
+
+    //going to the main
+    public void gotoMain(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

@@ -58,8 +58,9 @@ public class FireBaseConnection {
             e.printStackTrace();
         }
     }
+
     //neznam dali raboti
-    public static User getUser(final String nickName1, final String email1){
+    public static User getUser(final String nickName1, final String email1) {
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         final User[] user = {null};
         mRootRef.child("users").addValueEventListener(new ValueEventListener() {
@@ -73,7 +74,7 @@ public class FireBaseConnection {
                     String pass = snap.child("Password").getValue(String.class);
                     Double lati = snap.child("location").child("Latitude").getValue(Double.class);
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
-                    if(nickName1.equals(nickname)&&email1.equals(email)){
+                    if (nickName1.equals(nickname) && email1.equals(email)) {
                         user[0] = new User(name, email, nickname, pass, new location(lati, longi));
                     }
 

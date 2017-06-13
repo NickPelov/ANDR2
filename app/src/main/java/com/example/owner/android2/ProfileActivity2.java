@@ -13,10 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class ProfileActivity2 extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
+    TextView nickNameTextView;
+    TextView emailTextView;
+    TextView pointsTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +38,6 @@ public class ProfileActivity2 extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -43,6 +47,13 @@ public class ProfileActivity2 extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
+
+        nickNameTextView = (TextView) findViewById(R.id.RetrievedProfileName);
+        emailTextView = (TextView) findViewById(R.id.RetrivedProfileEmail);
+        pointsTextView = (TextView) findViewById(R.id.RetrievedProfilePoints);
+
+        nickNameTextView.setText(CurrentUser.getUser().NickName);
+        emailTextView.setText(CurrentUser.getUser().Email);
     }
 
     @Override
@@ -87,30 +98,52 @@ public class ProfileActivity2 extends AppCompatActivity
             gotoSettings(view2);
         } else if (id == R.id.achievements_option) {
             gotoAchiv(view2);
+        } else if (id == R.id.profile_option) {
+            gotoProfile(view2);
+        } else if (id == R.id.exit_option) {
+            CurrentUser.setLogged(false);
+            CurrentUser.setUser(null);
+            gotoMain(view2);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    //going to the profile
+
+    //going to the map
     public void gotoMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
-    //going to the profile
+
+    //going to the achievements
     public void gotoAchiv(View view) {
         Intent intent = new Intent(this, AchivementsActivity.class);
         startActivity(intent);
     }
-    //going to the profile
+
+    //going to the settings
     public void gotoSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
-    //going to the profile
+
+    //going to the events
     public void gotoEvents(View view) {
         Intent intent = new Intent(this, EventsActivity.class);
+        startActivity(intent);
+    }
+
+    //going to the profile
+    public void gotoProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity2.class);
+        startActivity(intent);
+    }
+
+    //going to the main
+    public void gotoMain(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }
