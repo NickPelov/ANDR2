@@ -3,6 +3,7 @@ package com.example.owner.android2;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -24,11 +25,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -298,7 +301,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         private final String mEmail;
         private final String mPassword;
         List<User> users;
@@ -342,12 +344,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
             if (i == 2) {
                 mEmailView.setError(getString(R.string.error_invalid_email));
                 mEmailView.requestFocus();
             } else if (success) {
-
+                Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_LONG).show();
                 CurrentUser.setLogged(true);
                 finish();
                 goToProfile(View2);

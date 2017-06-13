@@ -56,6 +56,7 @@ public class ProfileActivity2 extends AppCompatActivity
 
         nickNameTextView.setText(CurrentUser.getUser().NickName);
         emailTextView.setText(CurrentUser.getUser().Email);
+        pointsTextView.setText(String.valueOf(CurrentUser.getUser().Score));
     }
 
     @Override

@@ -29,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -379,6 +380,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             } else {
                 FireBaseConnection.pushNewInstanceUser(mName, mEmail, mPassword, mNick);
                 finish();
+                Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_LONG).show();
                 gotoLogin(View2);
             }
         }
