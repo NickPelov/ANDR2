@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -74,7 +75,29 @@ public class PushEventActivity extends AppCompatActivity
                 final int slots = Integer.parseInt(eventSlots.getText().toString());
                 final double latitude = Double.parseDouble(latitudeText.getText().toString());
                 final double longitude = Double.parseDouble(longitudeText.getText().toString());
-                FireBaseConnection.pushNewEvent(name,slots,new ArrayList<User>(),new ArrayList<User>(),latitude,longitude);
+                Participants p;
+                FinishedParticipants fp;
+                switch (slots){
+                    case 1: p = new Participants("");
+                        fp = new FinishedParticipants("");
+                        break;
+                    case 2:p = new Participants("","");
+                        fp = new FinishedParticipants("","");
+                        break;
+                    case 3:p = new Participants("","","");
+                        fp = new FinishedParticipants("","","");
+                        break;
+                    case 4:p = new Participants("","","","");
+                        fp = new FinishedParticipants("","","","");
+                        break;
+                    default:p = new Participants("","","","","");
+                        fp = new FinishedParticipants("","","","","");
+                        break;
+                }
+                FireBaseConnection.pushNewEvent(name,slots,p,fp,latitude,longitude);
+                Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_LONG).show();
+                finish();
+                gotoProfile(view2);
             }
         });
     }

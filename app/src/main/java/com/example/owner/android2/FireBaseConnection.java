@@ -1,5 +1,7 @@
 package com.example.owner.android2;
 
+import android.icu.text.MessagePattern;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,12 +63,12 @@ public class FireBaseConnection {
         }
     }
 
-    public static void pushNewEvent(String name, int slots,List<User> participants,List<User> finishedparticipants, Double latitude, Double longitude) {
+    public static void pushNewEvent(String name, int slots,Participants participants,FinishedParticipants finishedparticipants, Double latitude, Double longitude) {
         try {
             DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
             DatabaseReference usersTable = mRootRef.child("events").push();
             String pushId = usersTable.getKey();
-            usersTable.setValue(new EventCompetition(name,true,participants,finishedparticipants,slots,new location(latitude,longitude)));
+            usersTable.setValue(new EventCompetition(name,true,false,participants,finishedparticipants,slots,new location(latitude,longitude)));
         } catch (Exception e) {
             e.printStackTrace();
         }

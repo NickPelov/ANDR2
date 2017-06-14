@@ -1,0 +1,47 @@
+{
+    "users": 
+	[
+		{
+			"Name": "ADMIN",
+			"NickName" : "admin",
+			"Email" : "admin@",
+			"Password" : "ad",
+			"Score": 100,
+			"location":
+			{
+				"Longitude": 5.47152,
+				"Latitude": 51.4525
+			}
+		}
+	],
+	"events":
+	[
+		{
+			"Name": "event1",
+			"isActive": true,
+			"isStarted": false,
+			"Slots": 5,
+			"FinishedParticipants":
+			{
+			 "user1": "",
+			 "user2": "",
+			 "user3": "",
+			 "user4": "",
+			 "user5": ""
+			},
+			"Participants":
+			{
+			 "user1": "",
+			 "user2": "",
+			 "user3": "",
+			 "user4": "",
+			 "user5": ""
+			},
+			"location":
+			{
+				"Longitude": 5.47152,
+				"Latitude": 51.4525
+			}
+		}
+	]
+}
