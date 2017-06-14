@@ -56,6 +56,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private LocationRequest mLocationRequest;
     private LatLng latLng;
+    Thread sendLocationThread;
+    boolean doWork=true;
     Location location;
     int izverg = 1;
 //    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();

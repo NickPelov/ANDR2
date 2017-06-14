@@ -42,16 +42,20 @@ public class ProfileActivity2 extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                view2 = view;
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        if(CurrentUser.getUser().Name.equals("ADMIN")) {
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    view2 = view;
+                    gotoPushEvent(view);
+                    invalidateOptionsMenu();
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -107,12 +111,19 @@ public class ProfileActivity2 extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_profile2_drawer, menu);
+        menu.findItem(R.id.push_events_option).setVisible(false);
+
         return true;
     }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        return true;
+//        if(CurrentUser.getUser().Name.equals("ADMIN")){
+////            int i = menu.getItem(4).getItemId();
+//////            MenuItem item = menu.findItem(i);
+////            menu.getItem(i).setVisible(true);
+//            menu.findItem(R.id.push_events_option).setVisible(true);
+//        }
+        return super.onPrepareOptionsMenu(menu);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -144,12 +155,14 @@ public class ProfileActivity2 extends AppCompatActivity
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);
             finish();
-        } else if(id == R.id.push_events_option) {
-            if(CurrentUser.getUser().Name.equals("ADMIN")){
-                gotoPushEvent(view2);
-                finish();}
-
-        } else if (id == R.id.leaderboard_option) {
+        }
+//        else if(id == R.id.push_events_option) {
+//            if(CurrentUser.getUser().Name.equals("ADMIN")){
+//                gotoPushEvent(view2);
+//                finish();}
+//
+//        }
+        else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();
         } else if (id == R.id.exit_option) {

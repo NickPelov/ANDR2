@@ -33,18 +33,6 @@ public class PushEventActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                view2 = view;
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -65,8 +53,8 @@ public class PushEventActivity extends AppCompatActivity
         Button create = (Button)findViewById(R.id.event_push_DB);
 
 
-        CurrentLatitude.setText(String.valueOf(CurrentUser.getUser().location.Latitude));
-        CurrentLongitude.setText(String.valueOf(CurrentUser.getUser().location.Longitude));
+        CurrentLatitude.setText("Current latitude: "+String.valueOf(CurrentUser.getUser().location.Latitude));
+        CurrentLongitude.setText("Current longitude: "+String.valueOf(CurrentUser.getUser().location.Longitude));
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,10 +133,10 @@ public class PushEventActivity extends AppCompatActivity
             gotoProfile(view2);
             finish();
         }
-        else if (id == R.id.push_events_option) {
-            gotoPushEvent(view2);
-            finish();
-        }
+//        else if (id == R.id.push_events_option) {
+//            gotoPushEvent(view2);
+//            finish();
+//        }
         else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();

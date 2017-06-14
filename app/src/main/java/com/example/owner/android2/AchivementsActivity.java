@@ -27,16 +27,6 @@ public class AchivementsActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                view2 = view;
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -91,12 +81,13 @@ public class AchivementsActivity extends AppCompatActivity
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);
             finish();
-        } else if (CurrentUser.getUser().Name.equals("ADMIN")) {
-            if (id == R.id.push_events_option) {
-                gotoPushEvent(view2);
-                finish();
-            }
-        } else if (id == R.id.leaderboard_option) {
+        }
+//        else if (CurrentUser.getUser().Name.equals("ADMIN")) {
+//            if (id == R.id.push_events_option) {
+//                gotoPushEvent(view2);
+//                finish();
+//            }}
+         else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();
         } else if (id == R.id.exit_option) {
