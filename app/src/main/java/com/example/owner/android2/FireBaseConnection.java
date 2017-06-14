@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,6 +56,17 @@ public class FireBaseConnection {
             DatabaseReference usersTable = mRootRef.child("users").push();
             String pushId = usersTable.getKey();
             usersTable.setValue(new User(name, email, nickName, password,0, new location(0, 0)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void pushNewEvent(String name, int slots,List<User> participants,List<User> finishedparticipants, Double latitude, Double longitude) {
+        try {
+            DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference usersTable = mRootRef.child("events").push();
+            String pushId = usersTable.getKey();
+            usersTable.setValue(new EventCompetition(name,true,participants,finishedparticipants,slots,new location(latitude,longitude)));
         } catch (Exception e) {
             e.printStackTrace();
         }

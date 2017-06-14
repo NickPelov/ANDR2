@@ -51,7 +51,7 @@ public class AchivementsActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.achivements, menu);
+        getMenuInflater().inflate(R.menu.activity_profile2_drawer, menu);
         return true;
     }
 
@@ -91,11 +91,15 @@ public class AchivementsActivity extends AppCompatActivity
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);
             finish();
-        }
-        else if (id == R.id.leaderboard_option) {
+        } else if (CurrentUser.getUser().Name.equals("ADMIN")) {
+            if (id == R.id.push_events_option) {
+                gotoPushEvent(view2);
+                finish();
+            }
+        } else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();
-        }else if (id == R.id.exit_option) {
+        } else if (id == R.id.exit_option) {
             logoutFromProfile();
         }
 
@@ -104,11 +108,19 @@ public class AchivementsActivity extends AppCompatActivity
         return true;
 
     }
+
+    //going to the leaderboard
+    public void gotoPushEvent(View view) {
+        Intent intent = new Intent(this, PushEventActivity.class);
+        startActivity(intent);
+    }
+
     //going to the leaderboard
     public void gotoLeaderBoard(View view) {
         Intent intent = new Intent(this, LeaderboardActivity.class);
         startActivity(intent);
     }
+
     //going to the map
     public void gotoMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
@@ -144,6 +156,7 @@ public class AchivementsActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -153,7 +166,8 @@ public class AchivementsActivity extends AppCompatActivity
         finish();
         gotoProfile(view2);
     }
-    public void logoutFromProfile(){
+
+    public void logoutFromProfile() {
 
         new AlertDialog.Builder(this)
                 .setTitle("Really Log out?")

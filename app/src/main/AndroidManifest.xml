@@ -91,7 +91,11 @@
         <activity
             android:name=".LeaderboardActivity"
             android:label="@string/title_activity_leaderboard"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PushEventActivity"
+            android:label="@string/title_activity_push_event"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

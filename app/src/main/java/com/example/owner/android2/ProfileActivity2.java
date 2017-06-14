@@ -39,6 +39,7 @@ public class ProfileActivity2 extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile2);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -102,21 +103,23 @@ public class ProfileActivity2 extends AppCompatActivity
         }
     }
 
-        @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.profile_activity2, menu);
+        getMenuInflater().inflate(R.menu.activity_profile2_drawer, menu);
         return true;
     }
-
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -125,7 +128,7 @@ public class ProfileActivity2 extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        MenuItem m;
         if (id == R.id.map_option) {
             gotoMap(view2);
             finish();
@@ -141,11 +144,15 @@ public class ProfileActivity2 extends AppCompatActivity
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);
             finish();
-        }
-        else if (id == R.id.leaderboard_option) {
+        } else if(id == R.id.push_events_option) {
+            if(CurrentUser.getUser().Name.equals("ADMIN")){
+                gotoPushEvent(view2);
+                finish();}
+
+        } else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();
-        }else if (id == R.id.exit_option) {
+        } else if (id == R.id.exit_option) {
             logoutFromProfile();
         }
 
@@ -154,11 +161,19 @@ public class ProfileActivity2 extends AppCompatActivity
         return true;
 
     }
+
+    //going to the eventoush
+    public void gotoPushEvent(View view) {
+        Intent intent = new Intent(this, PushEventActivity.class);
+        startActivity(intent);
+    }
+
     //going to the leaderboard
     public void gotoLeaderBoard(View view) {
         Intent intent = new Intent(this, LeaderboardActivity.class);
         startActivity(intent);
     }
+
     //going to the map
     public void gotoMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
@@ -194,6 +209,7 @@ public class ProfileActivity2 extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -202,7 +218,8 @@ public class ProfileActivity2 extends AppCompatActivity
         }
         logoutFromProfile();
     }
-    public void logoutFromProfile(){
+
+    public void logoutFromProfile() {
 
         new AlertDialog.Builder(this)
                 .setTitle("Really Log out?")

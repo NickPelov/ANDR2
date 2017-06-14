@@ -15,17 +15,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class SettingsActivity extends AppCompatActivity
+import java.util.ArrayList;
+
+public class PushEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_push_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +53,30 @@ public class SettingsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
+
+        TextView CurrentLatitude = (TextView) findViewById(R.id.CurrentLatitude);
+        TextView CurrentLongitude = (TextView) findViewById(R.id.CurrentLongitude);
+
+        final EditText eventName = (EditText)findViewById(R.id.eventNameText);
+        final EditText eventSlots  = (EditText)findViewById(R.id.SlotsText);
+        final EditText latitudeText = (EditText)findViewById(R.id.LatitudeText);
+        final EditText longitudeText = (EditText)findViewById(R.id.LongitudeText);
+        Button create = (Button)findViewById(R.id.event_push_DB);
+
+
+        CurrentLatitude.setText(String.valueOf(CurrentUser.getUser().location.Latitude));
+        CurrentLongitude.setText(String.valueOf(CurrentUser.getUser().location.Longitude));
+
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String name = eventName.getText().toString();
+                final int slots = Integer.parseInt(eventSlots.getText().toString());
+                final double latitude = Double.parseDouble(latitudeText.getText().toString());
+                final double longitude = Double.parseDouble(longitudeText.getText().toString());
+                FireBaseConnection.pushNewEvent(name,slots,new ArrayList<User>(),new ArrayList<User>(),latitude,longitude);
+            }
+        });
     }
 
     @Override
@@ -75,7 +106,6 @@ public class SettingsActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.map_option) {
             gotoMap(view2);
             finish();
@@ -91,15 +121,15 @@ public class SettingsActivity extends AppCompatActivity
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);
             finish();
-        } else if (CurrentUser.getUser().Name.equals("ADMIN")) {
-            if (id == R.id.push_events_option) {
-                gotoPushEvent(view2);
-                finish();
-            }
-        } else if (id == R.id.leaderboard_option) {
+        }
+        else if (id == R.id.push_events_option) {
+            gotoPushEvent(view2);
+            finish();
+        }
+        else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();
-        } else if (id == R.id.exit_option) {
+        }else if (id == R.id.exit_option) {
             logoutFromProfile();
         }
 
@@ -108,19 +138,17 @@ public class SettingsActivity extends AppCompatActivity
         return true;
 
     }
-
     //going to the leaderboard
     public void gotoPushEvent(View view) {
         Intent intent = new Intent(this, PushEventActivity.class);
         startActivity(intent);
     }
 
-    //going to the leaderboard
+        //going to the leaderboard
     public void gotoLeaderBoard(View view) {
         Intent intent = new Intent(this, LeaderboardActivity.class);
         startActivity(intent);
     }
-
     //going to the map
     public void gotoMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
@@ -156,7 +184,6 @@ public class SettingsActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -166,8 +193,7 @@ public class SettingsActivity extends AppCompatActivity
         finish();
         gotoProfile(view2);
     }
-
-    public void logoutFromProfile() {
+    public void logoutFromProfile(){
 
         new AlertDialog.Builder(this)
                 .setTitle("Really Log out?")
