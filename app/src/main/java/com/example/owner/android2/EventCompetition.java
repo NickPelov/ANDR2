@@ -15,9 +15,14 @@ public class EventCompetition {
     public boolean isStarted;
     public location location;
 
-    public EventCompetition(String name,boolean isactive,boolean isstarted,Participants psrticipants, FinishedParticipants finishedpsrticipants,int slots,location location1){
+    public EventCompetition(String name,
+                            boolean isactive,
+                            boolean isstarted,
+                            Participants participants,
+                            FinishedParticipants finishedpsrticipants,
+                            int slots, location location1){
         this.Name = name;
-        this.Participants = psrticipants;
+        this.Participants = participants;
         this.FinishedParticipants = finishedpsrticipants;
         this.Slots = slots;
         this.location = location1;

@@ -2,6 +2,7 @@ package com.example.owner.android2;
 
 import android.icu.text.MessagePattern;
 
+import com.google.android.gms.games.snapshot.Snapshot;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,8 +21,10 @@ import java.util.Map;
 public class FireBaseConnection {
 
 
+    static DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+
     public static void LoadFromDB(final List<User> users) {
-        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+
         mRootRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -56,7 +59,7 @@ public class FireBaseConnection {
      */
     public static void pushNewInstanceUser(String name, String email, String password, String nickName) {
         try {
-            DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+
             DatabaseReference usersTable = mRootRef.child("users").push();
             String pushId = usersTable.getKey();
             usersTable.setValue(new User(name, email, nickName, password,0, new location(0, 0)));
@@ -67,7 +70,7 @@ public class FireBaseConnection {
 
     public static void pushNewEvent(String name, int slots,Participants participants,FinishedParticipants finishedparticipants, Double latitude, Double longitude) {
         try {
-            DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+
             DatabaseReference usersTable = mRootRef.child("events").push();
             String pushId = usersTable.getKey();
             usersTable.setValue(new EventCompetition(name,true,false,participants,finishedparticipants,slots,new location(latitude,longitude)));
@@ -78,7 +81,7 @@ public class FireBaseConnection {
 
     //neznam dali raboti
     public static User getUser(final String nickName1, final String email1) {
-        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+
         final User[] user = {null};
         mRootRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
@@ -108,7 +111,7 @@ public class FireBaseConnection {
     }
 
     public static void setUserLocation(final String nickName1, final String email1, final Double longitude, final Double lalitude) {
-        final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+
         mRootRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -134,5 +137,47 @@ public class FireBaseConnection {
 
         });
 
+    }
+    private static String p(int number,DataSnapshot snap){
+        return  snap.child("Participants").child("user"+number).getValue(String.class);
+    }
+    public static void getEvents(final List<EventCompetition> events){
+        mRootRef.child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()
+                        ) {
+                    String name = snap.child("Name").getValue(String.class);
+                    boolean isactive = snap.child("isActive").getValue(Boolean.class);
+                    Boolean isstarted = snap.child("isStarted").getValue(Boolean.class);
+                    FinishedParticipants finishedparticipants = null;
+                    int slots = snap.child("Slots").getValue(int.class);
+                    Participants participants;
+
+                    switch (slots){
+                        case 1: participants = new Participants(p(1,snap));
+                            break;
+                        case 2:participants = new Participants(p(1,snap),p(2,snap));
+                            break;
+                        case 3:participants = new Participants(p(1,snap),p(2,snap),p(3,snap));
+                            break;
+                        case 4:participants = new Participants(p(1,snap),p(2,snap),p(3,snap),p(4,snap));
+                            break;
+                        default:participants = new Participants(p(1,snap),p(2,snap),p(3,snap),p(4,snap),p(5,snap));
+                            break;
+                    }
+                    Double lati = snap.child("location").child("Latitude").getValue(Double.class);
+                    Double longi = snap.child("location").child("Longitude").getValue(Double.class);
+
+                    events.add(new EventCompetition(name,isactive,isstarted,participants, finishedparticipants,slots,new location(lati,longi)));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
