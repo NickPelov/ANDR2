@@ -9,7 +9,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by k_vol on 12/06/2017.
@@ -103,5 +105,34 @@ public class FireBaseConnection {
 
         });
         return user[0];
+    }
+
+    public static void setUserLocation(final String nickName1, final String email1, final Double longitude, final Double lalitude) {
+        final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+        mRootRef.child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()
+                        ) {
+                    String email = snap.child("Email").getValue(String.class);
+                    String nickname = snap.child("NickName").getValue(String.class);
+                    if (nickName1.equals(nickname) && email1.equals(email)) {
+                        String key = String.valueOf(snap.getKey());
+                        DatabaseReference mUser = mRootRef.child("users").child(key).child("location");
+                        Map<String,Object> taskMap = new HashMap<String,Object>();
+                        taskMap.put("Latitude", longitude);
+                        taskMap.put("Longitude",lalitude);
+                        mUser.updateChildren(taskMap);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+
+        });
+
     }
 }

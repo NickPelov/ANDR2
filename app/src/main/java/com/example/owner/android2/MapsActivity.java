@@ -58,11 +58,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng latLng;
     Location location;
     int izverg = 1;
-    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mUser = mRootRef.child("user");
-    private DatabaseReference mLocation = mUser.child("location");
-    private DatabaseReference mConditionLatitude = mLocation.child("Latitude");
-    private DatabaseReference mConditionLongitude = mLocation.child("Longitude");
+//    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+//    private DatabaseReference mUser = mRootRef.child("user");
+//    private DatabaseReference mLocation = mUser.child("location");
+//    private DatabaseReference mConditionLatitude = mLocation.child("Latitude");
+//    private DatabaseReference mConditionLongitude = mLocation.child("Longitude");
     double latitude;
     double longitude;
     View view2;
@@ -183,8 +183,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void handleNewLocation(Location location) {
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
-        mConditionLatitude.setValue(new Double(currentLatitude));
-        mConditionLongitude.setValue(new Double(currentLongitude));
         latLng = new LatLng(currentLatitude, currentLongitude);
 
         MarkerOptions options = new MarkerOptions()
@@ -198,6 +196,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng).zoom(14).bearing(90).tilt(40).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        FireBaseConnection.setUserLocation(CurrentUser.getUser().NickName,CurrentUser.getUser().Email,currentLatitude,currentLongitude);
     }
 
     private void handleNewLocationFromDB(double longitude, double latitude) {
