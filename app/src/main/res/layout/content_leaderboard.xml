@@ -8,4 +8,11 @@
     tools:context="com.example.owner.android2.LeaderboardActivity"
     tools:showIn="@layout/app_bar_leaderboard">
 
+    <ListView
+        android:id="@+id/leaderboard_list_view"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp" />
+
 </android.support.constraint.ConstraintLayout>

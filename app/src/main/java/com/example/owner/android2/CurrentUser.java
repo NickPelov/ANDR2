@@ -1,5 +1,8 @@
 package com.example.owner.android2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by k_vol on 12/06/2017.
  */
@@ -7,6 +10,7 @@ package com.example.owner.android2;
 public class CurrentUser {
     private static User user;
     private static boolean isLogged = false;
+    public static List<User> users = new ArrayList<>();
 
     public static void setLogged(boolean logged) {
         isLogged = logged;

@@ -150,7 +150,8 @@ public class AchivementsActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        logoutFromProfile();
+        finish();
+        gotoProfile(view2);
     }
     public void logoutFromProfile(){
 
@@ -161,6 +162,7 @@ public class AchivementsActivity extends AppCompatActivity
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        finish();
                         CurrentUser.setLogged(false);
                         CurrentUser.setUsertoNull();
                         gotoMain(view2);

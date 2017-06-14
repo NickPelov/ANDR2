@@ -128,17 +128,23 @@ public class ProfileActivity2 extends AppCompatActivity
 
         if (id == R.id.map_option) {
             gotoMap(view2);
+            finish();
         } else if (id == R.id.events_option) {
             gotoEvents(view2);
+            finish();
         } else if (id == R.id.settings_option) {
             gotoSettings(view2);
+            finish();
         } else if (id == R.id.achievements_option) {
             gotoAchiv(view2);
+            finish();
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);
+            finish();
         }
         else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
+            finish();
         }else if (id == R.id.exit_option) {
             logoutFromProfile();
         }
@@ -205,6 +211,7 @@ public class ProfileActivity2 extends AppCompatActivity
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        finish();
                         CurrentUser.setLogged(false);
                         CurrentUser.setUsertoNull();
                         ProfileActivity2.super.onBackPressed();

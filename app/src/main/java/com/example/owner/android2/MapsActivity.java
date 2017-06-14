@@ -91,7 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 view2 = v;
-                goBackToMain(v);
+                goBackToProfile(v);
             }
         });
 //        mConditionLatitude.addValueEventListener(new ValueEventListener() {
@@ -174,7 +174,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
                     izverg++;
-                    goBackToMain(view2);
+                    goBackToProfile(view2);
                 }
             }
         }
@@ -242,8 +242,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         handleNewLocation(location);
     }
 
-    public void goBackToMain(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+    public void goBackToProfile(View view) {
+        finish();
+        Intent intent = new Intent(this, ProfileActivity2.class);
         startActivity(intent);
     }
 }
