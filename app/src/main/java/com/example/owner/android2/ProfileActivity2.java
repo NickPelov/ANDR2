@@ -42,7 +42,7 @@ public class ProfileActivity2 extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(CurrentUser.getUser().Name.equals("ADMIN")) {
+        if(CurrentUser.getUser().NickName.equals("ADMIN")) {
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setVisibility(View.VISIBLE);
             fab.setOnClickListener(new View.OnClickListener() {
