@@ -111,7 +111,7 @@ public class ProfileActivity2 extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_profile2_drawer, menu);
-        menu.findItem(R.id.push_events_option).setVisible(false);
+        //menu.findItem(R.id.push_events_option).setVisible(false);
 
         return true;
     }
