@@ -3,22 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/parkour">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:onClick="loadLogin"
+        android:background="@color/cardview_dark_background"
         android:text="@string/button_login"
-        android:textColor="@color/text_in_button" />
+        android:textColor="@color/cardview_light_background" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="Register"
+        android:background="@color/cardview_dark_background"
         android:text="register"
-        android:textColor="@color/text_in_button" />
+        android:textColor="@color/cardview_light_background" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"

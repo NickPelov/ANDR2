@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/back3"
     tools:context="com.example.owner.android2.RegisterActivity">
 
     <!-- Login progress -->
@@ -31,12 +32,12 @@
             android:gravity="center"
             android:orientation="vertical">
             <android.support.design.widget.TextInputLayout
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/NameText"
-                    android:layout_width="300dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName"
@@ -45,26 +46,27 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/NickNameText"
-                    android:layout_width="300dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:hint="Public Name (nick name)" />
+                    android:hint="Public Name (nick name)"/>
+
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
                     android:id="@+id/email"
-                    android:layout_width="300dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
@@ -74,7 +76,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content">
 
                 <EditText
@@ -98,6 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Register"
+                android:textColor="@color/cardview_light_background"
                 android:textStyle="bold" />
 
         </LinearLayout>
