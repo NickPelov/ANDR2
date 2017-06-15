@@ -1,11 +1,13 @@
 package com.example.owner.android2;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,16 +17,48 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.android.gms.ads.doubleclick.CustomRenderedAd;
 
 public class EventsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private View view2;
-    @Override
+        private View view2;
+    ListView list;
+//    public View getView(int pos, View convertView, ViewGroup parent) {
+//        // Reuse convertView if possible
+//        if(convertView == null){
+//            LayoutInflater li = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        }
+//            convertView = li.inflate(R.layout.fragment_event_item, parent, false); }
+//
+//        // Get the relevant Views out of the hierarchy
+//        TextView tvName = (TextView)convertView.findViewById(R.id.fragment_textView);
+//
+//        // Look up the value to be displayed, and show in TextView
+//        String currentValue = myValuesList.get(pos).toString();
+//        tvName.setText(currentValue);
+//
+//        // Do other work, if any
+//
+//        // Return the Child View
+//        return convertView;
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        FireBaseConnection.getEvents(CurrentUser.events);
+        String[] names = new String[]{ CurrentUser.events.get(0).Name};
+        list =(ListView) findViewById(R.id.fragment_ListView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.fragment_event_item,names);
+        list.setAdapter(adapter);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

@@ -8,4 +8,8 @@
     tools:context="com.example.owner.android2.EventsActivity"
     tools:showIn="@layout/app_bar_events">
 
+    <ListView
+        android:id="@+id/fragment_ListView"
+        android:layout_width="380dp"
+        android:layout_height="508dp" />
 </android.support.constraint.ConstraintLayout>

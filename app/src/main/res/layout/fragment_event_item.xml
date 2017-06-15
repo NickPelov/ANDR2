@@ -1,0 +1,76 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.owner.android2.event_item">
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="61dp">
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            style="@android:style/Widget.Holo.Light.ImageButton"
+            android:layout_width="59dp"
+            android:layout_height="52dp"
+            android:background="@android:color/transparent"
+            android:cropToPadding="true"
+            app:srcCompat="@mipmap/event_2" />
+
+        <TextView
+            android:id="@+id/fragment_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/fragment_txt_slots"
+            android:layout_alignBottom="@+id/fragment_txt_slots"
+            android:layout_alignEnd="@+id/imageButton3"
+            android:layout_alignRight="@+id/imageButton3"
+            android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
+            android:text="350m away"
+            android:textSize="24sp" />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/fragment_textView"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="27dp"
+            android:layout_marginRight="27dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/fragment_txt_slots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/imageButton3"
+            android:layout_marginEnd="23dp"
+            android:layout_marginRight="23dp"
+            android:layout_toLeftOf="@+id/switch1"
+            android:layout_toStartOf="@+id/switch1"
+            android:text="6/10"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="30dp"
+            android:layout_height="23dp"
+            android:adjustViewBounds="false"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            app:srcCompat="@mipmap/ic_arrow"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/fragment_txt_slots"
+            android:layout_toStartOf="@+id/fragment_txt_slots"
+            android:layout_marginRight="36dp"
+            android:layout_marginEnd="36dp" />
+
+    </RelativeLayout>
+
+</FrameLayout>
