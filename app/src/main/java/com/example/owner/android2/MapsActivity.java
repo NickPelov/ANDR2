@@ -3,6 +3,7 @@ package com.example.owner.android2;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Icon;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -157,12 +160,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else if (izverg == 2) {
 
         } else {
-            location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (location == null) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            } else {
-                handleNewLocation(location);
+            if(location==null) {
+                location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             }
+            else if (location != null) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }
+            location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            handleNewLocation(location);
         }
     }
 
@@ -193,6 +198,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.clear();
         mMap.addMarker(options);
+        mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude+0.02,currentLongitude+0.02)).icon(BitmapDescriptorFactory.fromResource(R.drawable.event1)));
+        mMap.addCircle(new CircleOptions()
+                .center(new LatLng(currentLatitude+0.02,currentLongitude+0.02))
+                .radius(100));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -201,23 +210,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         FireBaseConnection.setUserLocation(CurrentUser.getUser().NickName,CurrentUser.getUser().Email,currentLatitude,currentLongitude);
     }
 
-    private void handleNewLocationFromDB(double longitude, double latitude) {
-        double currentLatitude = latitude;
-        double currentLongitude = longitude;
-
-        latLng = new LatLng(currentLatitude, currentLongitude);
-
-        MarkerOptions options = new MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-        mMap.clear();
-        mMap.addMarker(options);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(latLng).zoom(14).bearing(90).tilt(40).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
+//    private void handleNewLocationFromDB(double longitude, double latitude) {
+//        double currentLatitude = latitude;
+//        double currentLongitude = longitude;
+//
+//        latLng = new LatLng(currentLatitude, currentLongitude);
+//        MarkerOptions options = new MarkerOptions()
+//                .position(latLng)
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+//        mMap.clear();
+//        mMap.addMarker(options);
+//        mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.event1)));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//
+//        CameraPosition cameraPosition = new CameraPosition.Builder()
+//                .target(latLng).zoom(14).bearing(90).tilt(40).build();
+//        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//    }
 
     @Override
     public void onConnectionSuspended(int i) {

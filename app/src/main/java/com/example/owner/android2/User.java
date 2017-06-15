@@ -15,13 +15,15 @@ public class User {
     public String Password;
     public int Score;
     public location location;
+    public boolean isSignedForEvent;
 
-    public User(String name, String email, String nickname, String password,int score, location location) {
+    public User(String name,boolean isSigned, String email, String nickname, String password,int score, location location) {
         this.Name = name;
         this.Email = email;
         this.NickName = nickname;
         this.Password = password;
         this.location = location;
         this.Score = score;
+        this.isSignedForEvent = isSigned;
     }
 }

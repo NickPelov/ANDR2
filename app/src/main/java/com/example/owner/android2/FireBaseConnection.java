@@ -2,6 +2,7 @@ package com.example.owner.android2;
 
 import android.icu.text.MessagePattern;
 
+import com.facebook.internal.BoltsMeasurementEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,13 +30,14 @@ public class FireBaseConnection {
                         ) {
                     String name = snap.child("Name").getValue(String.class);
                     String email = snap.child("Email").getValue(String.class);
+                    boolean isSigned = snap.child("isSignedForEvent").getValue(Boolean.class);
                     String nickname = snap.child("NickName").getValue(String.class);
                     String pass = snap.child("Password").getValue(String.class);
                     int score = snap.child("Score").getValue(Integer.class);
                     Double lati = snap.child("location").child("Latitude").getValue(Double.class);
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
 
-                    users.add(new User(name, email, nickname, pass,score, new location(lati, longi)));
+                    users.add(new User(name,isSigned, email, nickname, pass,score, new location(lati, longi)));
 
                 }
             }
@@ -59,7 +61,7 @@ public class FireBaseConnection {
             DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
             DatabaseReference usersTable = mRootRef.child("users").push();
             String pushId = usersTable.getKey();
-            usersTable.setValue(new User(name, email, nickName, password,0, new location(0, 0)));
+            usersTable.setValue(new User(name,false, email, nickName, password,0, new location(0, 0)));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,13 +89,14 @@ public class FireBaseConnection {
                         ) {
                     String name = snap.child("Name").getValue(String.class);
                     String email = snap.child("Email").getValue(String.class);
+                    boolean isSigned = snap.child("isSignedForEvent").getValue(Boolean.class);
                     String nickname = snap.child("NickName").getValue(String.class);
                     String pass = snap.child("Password").getValue(String.class);
                     int score = snap.child("Score").getValue(Integer.class);
                     Double lati = snap.child("location").child("Latitude").getValue(Double.class);
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
                     if (nickName1.equals(nickname) && email1.equals(email)) {
-                        user[0] = new User(name, email, nickname, pass,score, new location(lati, longi));
+                        user[0] = new User(name,isSigned, email, nickname, pass,score, new location(lati, longi));
                     }
 
                 }
@@ -108,7 +111,9 @@ public class FireBaseConnection {
     }
 
     public static void setUserLocation(final String nickName1, final String email1, final Double longitude, final Double lalitude) {
+
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+        mRootRef.goOnline();
         mRootRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -133,6 +138,7 @@ public class FireBaseConnection {
             }
 
         });
+        mRootRef.goOffline();
 
     }
 }

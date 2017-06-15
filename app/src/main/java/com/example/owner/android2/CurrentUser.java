@@ -26,7 +26,17 @@ public class CurrentUser {
     public static User getUser() {
         return user;
     }
-
+    public static void setIsSignedForEvent(boolean bool){
+        if(CurrentUser.getUser()!=null){
+            CurrentUser.getUser().isSignedForEvent = bool;
+        }
+    }
+    public static Boolean getIsSignedForEvent(){
+        if(CurrentUser.getUser()!=null){
+            return CurrentUser.getUser().isSignedForEvent;
+        }
+        return false;
+    }
     public static void setUser(User user1) {
         user = user1;
     }
