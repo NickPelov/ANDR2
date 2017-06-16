@@ -24,6 +24,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class LeaderboardActivity extends AppCompatActivity
@@ -36,7 +40,7 @@ public class LeaderboardActivity extends AppCompatActivity
         setContentView(R.layout.activity_leaderboard);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        CurrentUser.sortlist();
 
         String[] names;
         String[] scores;
@@ -52,16 +56,22 @@ public class LeaderboardActivity extends AppCompatActivity
                 scores[i]=String.valueOf(CurrentUser.users.get(i).Score);
                 places[i]= String.valueOf(i+1+".");
 //                Image ii = new Image(BitmapCompat.getAllocationByteCount(new Bitmap(findViewById(R.drawable.achievements))))
-                list1[i] = new ListItem(places[i],names[i],scores[i],R.drawable.achievements);
+                list1[i] = new ListItem(places[i],names[i],scores[i]);
             }
         }
         else{
             names = new String[]{"1", "1"};
             scores = new String[]{"1", "1"};
             places = new String[]{"1", "1"};
-            list1 = new ListItem[]{new ListItem("a","a","a",R.drawable.achievements)};
+            list1 = new ListItem[]{new ListItem("a","a","a")};
         }
 
+//        Arrays.sort(list1, new Comparator<ListItem>() {
+//            @Override
+//            public int compare(ListItem o1, ListItem o2) {
+//                return o1.textview3.compareTo(o2.textview3);
+//            }
+//        });
 
         ArrayAdapter<Object> adapter = new AdapterLeaderBoard(this,list1);
         list =(ListView) findViewById(R.id.leaderboard_list_view);

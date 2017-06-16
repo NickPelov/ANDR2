@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +26,8 @@ import android.widget.TextView;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -70,6 +73,7 @@ public class ProfileActivity2 extends AppCompatActivity
         CurrentUser.events = new ArrayList<>();
         FireBaseConnection.getEvents(CurrentUser.events);
         FireBaseConnection.LoadFromDB(CurrentUser.users);
+
         nickNameTextView = (TextView) findViewById(R.id.RetrievedProfileName);
         emailTextView = (TextView) findViewById(R.id.RetrivedProfileEmail);
         pointsTextView = (TextView) findViewById(R.id.RetrievedProfilePoints);

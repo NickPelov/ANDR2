@@ -15,8 +15,8 @@
         android:layout_height="61dp"
         android:id="@+id/relativeLayout3">
 
-        <ImageButton
-            android:id="@+id/imageButton2"
+        <ImageView
+            android:id="@+id/image_view_leaderboard"
             style="@android:style/Widget.Holo.Light.ImageButton"
             android:layout_width="59dp"
             android:layout_height="52dp"

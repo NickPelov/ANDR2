@@ -1,6 +1,8 @@
 package com.example.owner.android2;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -14,6 +16,10 @@ public class CurrentUser {
     public static List<User> users = new ArrayList<>();
     public static List<EventCompetition> events = new ArrayList<>();
     public static String UserKey;
+
+    public static void sortlist(){
+        Collections.sort(users,new MyComparator());
+    }
 
     public static void setLogged(boolean logged) {
         isLogged = logged;

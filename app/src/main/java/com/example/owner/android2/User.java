@@ -2,6 +2,7 @@ package com.example.owner.android2;
 
 import android.location.Location;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ public class User {
     public String Email;
     public String NickName;
     public String Password;
-    public int Score;
+    public final int Score;
     public location location;
     public boolean isSignedForEvent;
 
@@ -27,6 +28,22 @@ public class User {
         this.isSignedForEvent = isSigned;
     }
 }
+class MyComparator implements Comparator<User> {
+    @Override
+    public int compare(User o1, User o2) {
+        if (o1.Score > o2.Score) {
+            return -1;
+        } else if (o1.Score < o2.Score) {
+            return 1;
+        }
+        return 0;
+    }}
+//class CustomComparator implements Comparator<User> {
+//    @Override
+//    public int compare(User o1, User o2) {
+//        return o1.Score - (o2.Score);
+//    }
+//}
 class UserKey
 {
     public String Key;
