@@ -138,6 +138,7 @@ public class FireBaseConnection {
         });
 
     }
+
     private static String p(int number,DataSnapshot snap){
         return  snap.child("Participants").child("user"+number).getValue(String.class);
     }
@@ -150,7 +151,7 @@ public class FireBaseConnection {
                     String name = snap.child("Name").getValue(String.class);
                     boolean isactive = snap.child("isActive").getValue(Boolean.class);
                     Boolean isstarted = snap.child("isStarted").getValue(Boolean.class);
-                    FinishedParticipants finishedparticipants = null;
+                    FinishedParticipants finishedparticipants = new FinishedParticipants("");
                     int slots = snap.child("Slots").getValue(int.class);
                     Participants participants;
 

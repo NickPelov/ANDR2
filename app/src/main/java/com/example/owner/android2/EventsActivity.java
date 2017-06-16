@@ -24,28 +24,14 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.doubleclick.CustomRenderedAd;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EventsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
         private View view2;
     ListView list;
-//    public View getView(int pos, View convertView, ViewGroup parent) {
-//        // Reuse convertView if possible
-//        if(convertView == null){
-//            LayoutInflater li = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        }
-//            convertView = li.inflate(R.layout.fragment_event_item, parent, false); }
-//
-//        // Get the relevant Views out of the hierarchy
-//        TextView tvName = (TextView)convertView.findViewById(R.id.fragment_textView);
-//
-//        // Look up the value to be displayed, and show in TextView
-//        String currentValue = myValuesList.get(pos).toString();
-//        tvName.setText(currentValue);
-//
-//        // Do other work, if any
-//
-//        // Return the Child View
-//        return convertView;
+
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +39,19 @@ public class EventsActivity extends AppCompatActivity
         setContentView(R.layout.activity_events);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FireBaseConnection.getEvents(CurrentUser.events);
-        String[] names = new String[]{ CurrentUser.events.get(0).Name};
+
+
+            String[] names;
+            if (!CurrentUser.events.isEmpty()){
+                 names = new String[]{ CurrentUser.events.get(0).Name};
+            }
+            else{
+                names = new String[]{"6/10", "7/10"};
+            }
+
+
+        ArrayAdapter<String> adapter = new CustomAdapter(this,names);
         list =(ListView) findViewById(R.id.fragment_ListView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.fragment_event_item,names);
         list.setAdapter(adapter);
 
 
