@@ -31,7 +31,10 @@ public class EventsActivity extends AppCompatActivity
 
         String[] names;
         if (!CurrentUser.events.isEmpty()){
-            names = new String[]{ CurrentUser.events.get(0).Name};
+            names = new String[CurrentUser.events.size()];
+            for (int i=0;i< names.length;i++){
+                names[i]=CurrentUser.events.get(i).Name;
+            }
         }
         else{
             names = new String[]{"6/10", "7/10"};

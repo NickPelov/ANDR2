@@ -18,10 +18,10 @@
             android:id="@+id/events_option"
             android:icon="@mipmap/event_2"
             android:title="Events" />
-        <item
-            android:id="@+id/push_events_option"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Create Events"/>
+        <!--<item-->
+            <!--android:id="@+id/push_events_option"-->
+            <!--android:icon="@mipmap/ic_launcher"-->
+            <!--android:title="Create Events"/>-->
     </group>
 
     <item android:title="Profile">

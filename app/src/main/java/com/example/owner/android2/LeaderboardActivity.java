@@ -2,10 +2,13 @@ package com.example.owner.android2;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -26,6 +29,7 @@ import java.util.List;
 public class LeaderboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
+    private ListView list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +37,42 @@ public class LeaderboardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        String[] names;
+        String[] scores;
+        String[] places;
+        ListItem[] list1;
+        if (!CurrentUser.users.isEmpty()){
+            names = new String[CurrentUser.users.size()];
+            scores = new String[CurrentUser.users.size()];
+            places = new String[CurrentUser.users.size()];
+            list1 = new ListItem[CurrentUser.users.size()];
+            for (int i=0;i< names.length;i++){
+                names[i]=CurrentUser.users.get(i).NickName;
+                scores[i]=String.valueOf(CurrentUser.users.get(i).Score);
+                places[i]= String.valueOf(i+1+".");
+//                Image ii = new Image(BitmapCompat.getAllocationByteCount(new Bitmap(findViewById(R.drawable.achievements))))
+                list1[i] = new ListItem(places[i],names[i],scores[i],R.drawable.achievements);
+            }
+        }
+        else{
+            names = new String[]{"1", "1"};
+            scores = new String[]{"1", "1"};
+            places = new String[]{"1", "1"};
+            list1 = new ListItem[]{new ListItem("a","a","a",R.drawable.achievements)};
+        }
+
+
+        ArrayAdapter<Object> adapter = new AdapterLeaderBoard(this,list1);
+        list =(ListView) findViewById(R.id.leaderboard_list_view);
+        list.setAdapter(adapter);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);

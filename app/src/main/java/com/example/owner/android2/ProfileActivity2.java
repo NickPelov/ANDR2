@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
 
+import java.util.ArrayList;
+
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileActivity2 extends AppCompatActivity
@@ -65,7 +67,9 @@ public class ProfileActivity2 extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
+        CurrentUser.events = new ArrayList<>();
         FireBaseConnection.getEvents(CurrentUser.events);
+        FireBaseConnection.LoadFromDB(CurrentUser.users);
         nickNameTextView = (TextView) findViewById(R.id.RetrievedProfileName);
         emailTextView = (TextView) findViewById(R.id.RetrivedProfileEmail);
         pointsTextView = (TextView) findViewById(R.id.RetrievedProfilePoints);
@@ -111,8 +115,6 @@ public class ProfileActivity2 extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_profile2_drawer, menu);
-        menu.findItem(R.id.push_events_option).setVisible(false);
-
         return true;
     }
     @Override
