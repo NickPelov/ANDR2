@@ -72,6 +72,7 @@ public class ProfileActivity2 extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         CurrentUser.events = new ArrayList<>();
         FireBaseConnection.getEvents(CurrentUser.events);
+        CurrentUser.users = new ArrayList<>();
         FireBaseConnection.LoadFromDB(CurrentUser.users);
 
         nickNameTextView = (TextView) findViewById(R.id.RetrievedProfileName);
