@@ -113,7 +113,6 @@ public class FireBaseConnection {
     public static void setUserLocation(final String nickName1, final String email1, final Double longitude, final Double lalitude) {
 
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-        mRootRef.goOnline();
         mRootRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -138,7 +137,6 @@ public class FireBaseConnection {
             }
 
         });
-        mRootRef.goOffline();
 
     }
 }

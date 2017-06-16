@@ -60,10 +60,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationRequest mLocationRequest;
     private LatLng latLng;
     Thread sendLocationThread;
-    boolean doWork=true;
+    boolean doWork = true;
     Location location;
     int izverg = 1;
-//    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    //    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
 //    private DatabaseReference mUser = mRootRef.child("user");
 //    private DatabaseReference mLocation = mUser.child("location");
 //    private DatabaseReference mConditionLatitude = mLocation.child("Latitude");
@@ -71,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double latitude;
     double longitude;
     View view2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +92,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(1000)
                 .setFastestInterval(100);
-        Button bt1 = (Button)findViewById(R.id.buttonBack);
+        Button bt1 = (Button) findViewById(R.id.buttonBack);
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 goBackToProfile(v);
             }
         });
+        mGoogleApiClient.connect();
 //        mConditionLatitude.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
@@ -143,6 +145,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+        }
+        mMap.setMyLocationEnabled(true);
+
     }
 
     @Override
@@ -160,14 +174,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else if (izverg == 2) {
 
         } else {
-            if(location==null) {
-                location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            }
-            else if (location != null) {
+            try {
+//                if (location == null) {
+//                    location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//                } else if (location != null) {
+//
+//                }
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+                location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                handleNewLocation(location);
             }
-            location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            handleNewLocation(location);
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
