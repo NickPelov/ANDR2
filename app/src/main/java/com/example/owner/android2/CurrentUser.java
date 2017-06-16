@@ -10,7 +10,9 @@ import java.util.List;
 public class CurrentUser {
     private static User user;
     private static boolean isLogged = false;
+    public static List<UserKey> keys = new ArrayList<>();
     public static List<User> users = new ArrayList<>();
+    public static String UserKey;
 
     public static void setLogged(boolean logged) {
         isLogged = logged;

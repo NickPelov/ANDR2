@@ -61,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng latLng;
     Thread sendLocationThread;
     boolean doWork = true;
-    Location location;
+    Location location = null;
     int izverg = 1;
     //    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
 //    private DatabaseReference mUser = mRootRef.child("user");
@@ -101,6 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         mGoogleApiClient.connect();
+        th1().start();
 //        mConditionLatitude.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
@@ -183,11 +184,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
                 location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                 handleNewLocation(location);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private Thread th1() {
+        return new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Location loc = null;
+                while (true) {
+                    while (location != null) {
+                        if (loc != location) {
+                            loc = location;
+                            FireBaseConnection.setUserLocation(CurrentUser.getUser().NickName, CurrentUser.getUser()
+                                    .Email, loc.getLatitude(), loc.getLongitude());
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -217,16 +235,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.clear();
         mMap.addMarker(options);
-        mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude+0.02,currentLongitude+0.02)).icon(BitmapDescriptorFactory.fromResource(R.drawable.event1)));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude + 0.02, currentLongitude + 0.02)).icon(BitmapDescriptorFactory.fromResource(R.drawable.event1)));
         mMap.addCircle(new CircleOptions()
-                .center(new LatLng(currentLatitude+0.02,currentLongitude+0.02))
+                .center(new LatLng(currentLatitude + 0.02, currentLongitude + 0.02))
                 .radius(100));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng).zoom(14).bearing(90).tilt(40).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        FireBaseConnection.setUserLocation(CurrentUser.getUser().NickName,CurrentUser.getUser().Email,currentLatitude,currentLongitude);
+
     }
 
 //    private void handleNewLocationFromDB(double longitude, double latitude) {
@@ -267,6 +285,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
+        this.location = location;
         handleNewLocation(location);
     }
 

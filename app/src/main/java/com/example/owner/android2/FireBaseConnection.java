@@ -28,6 +28,7 @@ public class FireBaseConnection {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snap : dataSnapshot.getChildren()
                         ) {
+                    String key = snap.getKey();
                     String name = snap.child("Name").getValue(String.class);
                     String email = snap.child("Email").getValue(String.class);
                     boolean isSigned = snap.child("isSignedForEvent").getValue(Boolean.class);
@@ -38,7 +39,7 @@ public class FireBaseConnection {
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
 
                     users.add(new User(name,isSigned, email, nickname, pass,score, new location(lati, longi)));
-
+                    CurrentUser.keys.add(new UserKey(key,nickname));
                 }
             }
 
@@ -113,30 +114,16 @@ public class FireBaseConnection {
     public static void setUserLocation(final String nickName1, final String email1, final Double longitude, final Double lalitude) {
 
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-        mRootRef.child("users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snap : dataSnapshot.getChildren()
-                        ) {
-                    String email = snap.child("Email").getValue(String.class);
-                    String nickname = snap.child("NickName").getValue(String.class);
-                    if (nickName1.equals(nickname) && email1.equals(email)) {
-                        String key = String.valueOf(snap.getKey());
-                        DatabaseReference mUser = mRootRef.child("users").child(key).child("location");
-                        Map<String,Object> taskMap = new HashMap<String,Object>();
-                        taskMap.put("Latitude", longitude);
-                        taskMap.put("Longitude",lalitude);
-                        mUser.updateChildren(taskMap);
-                    }
-
-                }
+        DatabaseReference mUser;
+        for (UserKey u:CurrentUser.keys
+             ) {
+            if(u.NickName.equals(nickName1)){
+                mUser = mRootRef.child("users").child(u.Key).child("location");
+                Map<String,Object> taskMap = new HashMap<String,Object>();
+                taskMap.put("Latitude", longitude);
+                taskMap.put("Longitude",lalitude);
+                mUser.updateChildren(taskMap);
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-
-        });
-
+        }
     }
 }

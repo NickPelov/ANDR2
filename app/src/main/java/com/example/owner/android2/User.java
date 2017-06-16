@@ -27,3 +27,12 @@ public class User {
         this.isSignedForEvent = isSigned;
     }
 }
+class UserKey
+{
+    public String Key;
+    public String NickName;
+    public UserKey(String key, String nickName){
+        this.Key = key;
+        this.NickName = nickName;
+    }
+}
