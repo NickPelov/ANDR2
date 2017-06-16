@@ -4,10 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -275,6 +277,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
+    @Override
+    public void onBackPressed() {
+       LoginActivity.super.onBackPressed();
+        gotoMain(View2);
+       finish();
+    }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
@@ -369,6 +377,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     //going to the profile
     public void goToProfile(View view) {
         Intent intent = new Intent(this, ProfileActivity2.class);
+        startActivity(intent);
+    }
+    public void gotoMain(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

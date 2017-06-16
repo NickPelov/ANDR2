@@ -33,14 +33,16 @@ public class AdapterLeaderBoard extends ArrayAdapter<Object> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup par){
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View customView = inflater.inflate(R.layout.fragment_leaderboard_item,par,false);
 
+        if(convertView == null){
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = inflater.inflate(R.layout.fragment_leaderboard_item,par,false);
+        }
         ListItem slots = (ListItem) getItem(position);
-        TextView user_place_txt = (TextView) customView.findViewById(R.id.fragment_txt_place);
-        TextView user_name_txt = (TextView) customView.findViewById(R.id.fragment_userName_textView);
-        TextView user_score_txt = (TextView) customView.findViewById(R.id.fragment_txt_score);
-        ImageView imageView = (ImageView) customView.findViewById(R.id.image_view_leaderboard);
+        TextView user_place_txt = (TextView) convertView.findViewById(R.id.fragment_txt_place);
+        TextView user_name_txt = (TextView) convertView.findViewById(R.id.fragment_userName_textView);
+        TextView user_score_txt = (TextView) convertView.findViewById(R.id.fragment_txt_score);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.image_view_leaderboard);
         switch (slots.textview1){
             case "1.":imageView.setImageResource(R.mipmap.first_place);
                 user_place_txt.setText("");
@@ -52,13 +54,14 @@ public class AdapterLeaderBoard extends ArrayAdapter<Object> {
                 user_place_txt.setText("");
                 break;
             default:
+                imageView.setImageResource(0);
                 user_place_txt.setText(slots.textview1);
                 break;
         }
         user_name_txt.setText(slots.textview2);
         user_score_txt.setText(slots.textview3);
 
-        return customView;
+        return convertView;
 
     }
 }

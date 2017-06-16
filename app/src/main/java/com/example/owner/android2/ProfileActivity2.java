@@ -251,8 +251,10 @@ public class ProfileActivity2 extends AppCompatActivity
                         finish();
                         CurrentUser.setLogged(false);
                         CurrentUser.setUsertoNull();
+                        gotoMain(view2);
                         ProfileActivity2.super.onBackPressed();
                     }
                 }).create().show();
     }
+
 }

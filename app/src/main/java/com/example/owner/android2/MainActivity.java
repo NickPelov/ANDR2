@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     public void Register(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
+        finish();
     }
 
     /**
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
     public void loadLogin(View view) {
         Intent innt = new Intent(this, LoginActivity.class);
         startActivity(innt);
+        finish();
     }
 
     @Override
@@ -132,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                                 MainActivity.super.onBackPressed();
+                                finish();
                     }
                 }).create().show();
     }
