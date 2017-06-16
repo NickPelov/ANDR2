@@ -126,4 +126,49 @@ public class FireBaseConnection {
             }
         }
     }
+
+    private static String p(int number,DataSnapshot snap){
+        return  snap.child("Participants").child("user"+number).getValue(String.class);
+    }
+
+    public static void getEvents(final List<EventCompetition> events){
+        final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+        mRootRef.child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snap : dataSnapshot.getChildren()
+                        ) {
+                    String name = snap.child("Name").getValue(String.class);
+                    boolean isactive = snap.child("isActive").getValue(Boolean.class);
+                    Boolean isstarted = snap.child("isStarted").getValue(Boolean.class);
+                    FinishedParticipants finishedparticipants = new FinishedParticipants("");
+                    int slots = snap.child("Slots").getValue(int.class);
+                    Participants participants;
+
+                    switch (slots){
+                        case 1: participants = new Participants(p(1,snap));
+                            break;
+                        case 2:participants = new Participants(p(1,snap),p(2,snap));
+                            break;
+                        case 3:participants = new Participants(p(1,snap),p(2,snap),p(3,snap));
+                            break;
+                        case 4:participants = new Participants(p(1,snap),p(2,snap),p(3,snap),p(4,snap));
+                            break;
+                        default:participants = new Participants(p(1,snap),p(2,snap),p(3,snap),p(4,snap),p(5,snap));
+                            break;
+                    }
+                    Double lati = snap.child("location").child("Latitude").getValue(Double.class);
+                    Double longi = snap.child("location").child("Longitude").getValue(Double.class);
+
+                    events.add(new EventCompetition(name,isactive,isstarted,participants, finishedparticipants,slots,new location(lati,longi)));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

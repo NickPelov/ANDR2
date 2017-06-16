@@ -12,6 +12,7 @@ public class CurrentUser {
     private static boolean isLogged = false;
     public static List<UserKey> keys = new ArrayList<>();
     public static List<User> users = new ArrayList<>();
+    public static List<EventCompetition> events = new ArrayList<>();
     public static String UserKey;
 
     public static void setLogged(boolean logged) {

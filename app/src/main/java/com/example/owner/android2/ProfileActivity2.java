@@ -65,7 +65,7 @@ public class ProfileActivity2 extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
-
+        FireBaseConnection.getEvents(CurrentUser.events);
         nickNameTextView = (TextView) findViewById(R.id.RetrievedProfileName);
         emailTextView = (TextView) findViewById(R.id.RetrivedProfileEmail);
         pointsTextView = (TextView) findViewById(R.id.RetrievedProfilePoints);
