@@ -1,14 +1,19 @@
 package com.example.owner.android2;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -20,14 +25,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodSession;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Currency;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -38,6 +52,8 @@ public class ProfileActivity2 extends AppCompatActivity
     TextView emailTextView;
     TextView pointsTextView;
     ImageView imageView;
+    float distance;
+    Thread th1 = t1();
     public static final int RESULT_LOAD_IMAGE = 0;
 
     @Override
@@ -74,7 +90,6 @@ public class ProfileActivity2 extends AppCompatActivity
         FireBaseConnection.getEvents(CurrentUser.events);
         CurrentUser.users = new ArrayList<>();
         FireBaseConnection.LoadFromDB(CurrentUser.users);
-
         nickNameTextView = (TextView) findViewById(R.id.RetrievedProfileName);
         emailTextView = (TextView) findViewById(R.id.RetrivedProfileEmail);
         pointsTextView = (TextView) findViewById(R.id.RetrievedProfilePoints);
@@ -93,6 +108,54 @@ public class ProfileActivity2 extends AppCompatActivity
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
+        th1.start();
+
+
+    }
+
+    public Thread t1() {
+        return new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (FireBaseConnection.isTrue) {
+                        Location loc1 = new Location("y");
+                        loc1.setLatitude(CurrentUser.getUser().location.Latitude);
+                        loc1.setLongitude(CurrentUser.getUser().location.Longitude);
+                        Location loc2 = new Location("z");
+                        loc2.setLatitude(CurrentUser.events.get(CurrentUser.events.size()-1).location.Latitude);
+                        loc2.setLongitude(CurrentUser.events.get(CurrentUser.events.size()-1).location.Longitude);
+                        int slots = CurrentUser.events.get(CurrentUser.events.size()-1).Slots;
+                        distance = loc1.distanceTo(loc2);
+                        showNotification(view2, slots);
+                        FireBaseConnection.isTrue = false;
+                        FireBaseConnection.isInitial = true;
+                    }
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+    }
+
+    public void showNotification(View v, int slot) {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_icon2)
+                .setContentTitle("There is a new event for " + slot + " people")
+                .setContentText("it is " + String.format("%,2f", distance / 1000) + "km away!");
+        Intent resultIntent = new Intent(this, EventsActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(EventsActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(getBaseContext().NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, mBuilder.build());
     }
 
     @Override

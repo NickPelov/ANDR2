@@ -1,11 +1,16 @@
 package com.example.owner.android2;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,7 +30,6 @@ import java.util.ArrayList;
 public class PushEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +91,7 @@ public class PushEventActivity extends AppCompatActivity
                         fp = new FinishedParticipants("", "", "", "", "");
                         break;
                 }
+
                 FireBaseConnection.pushNewEvent(name, slots, p, fp, latitude, longitude);
                 Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
                 finish();
@@ -94,6 +99,8 @@ public class PushEventActivity extends AppCompatActivity
             }
         });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

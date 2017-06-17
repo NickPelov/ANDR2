@@ -20,6 +20,9 @@ import java.util.Map;
 
 public class FireBaseConnection {
 
+    public static boolean isInitial = true;
+    public static boolean isTrue = false;
+    public static EventCompetition tempRecord;
 
     public static void LoadFromDB(final List<User> users) {
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -167,6 +170,17 @@ public class FireBaseConnection {
 
                     events.add(new EventCompetition(name, isactive, isstarted, participants, finishedparticipants, slots, new location(lati, longi)));
 
+                }
+                if (isInitial) {
+                    tempRecord = events.get(events.size() - 1);
+                    isInitial = false;
+                }
+                else if (!tempRecord.Name.equals(events.get(events.size() - 1).Name)) {
+                    if (!isInitial) {
+                        isTrue = true;
+                    } else {
+                        isInitial = false;
+                    }
                 }
             }
 
