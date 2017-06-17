@@ -49,19 +49,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private LatLng latLng;
     Location location = null;
-    Thread sendLocationThread;
-
-    boolean doWork = false;
+    private volatile Thread th1 = th1();
+    private volatile Thread th2 = th2();
     int izverg = 1;
 
     public List<User> otherUsers = new ArrayList<>();
-    //    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-//    private DatabaseReference mUser = mRootRef.child("user");
-//    private DatabaseReference mLocation = mUser.child("location");
-//    private DatabaseReference mConditionLatitude = mLocation.child("Latitude");
-//    private DatabaseReference mConditionLongitude = mLocation.child("Longitude");
-    double latitude;
-    double longitude;
+
     View view2;
 
     @Override
@@ -104,8 +97,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mGoogleApiClient.connect();
         updateLocation();
-        th1().start();
-        th2().start();
+        th1.start();
+        th2.start();
 //        mConditionLatitude.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
@@ -136,8 +129,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         mGoogleApiClient.connect();
         updateLocation();
-        th1().start();
-        th2().start();
+        th1.start();
+        th2.start();
         super.onResume();
     }
 
@@ -147,8 +140,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
             try {
-                th1().interrupt();
-                th2().interrupt();
+                stopThreads();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -161,16 +153,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
         }
         mMap.setMyLocationEnabled(true);
-        updateLocation();
+//        updateLocation();
     }
 
     @Override
@@ -189,7 +174,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
         } else if (izverg == 2) {
-
         } else {
             try {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -206,13 +190,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void run() {
                 Location loc = null;
-                while (true) {
+                Thread tt = Thread.currentThread();
+                while (th1()== tt) {
+                    try {
                     while (location != null) {
                         if (loc != location) {
                             loc = location;
                             FireBaseConnection.setUserLocation(CurrentUser.getUser().NickName, CurrentUser.getUser()
                                     .Email, loc.getLatitude(), loc.getLongitude());
                         }
+                    }
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -223,7 +213,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                Thread tt = Thread.currentThread();
+                while (th2()== tt ) {
                     otherUsers = new ArrayList<>();
                     FireBaseConnection.LoadFromDB(otherUsers);
                     Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -267,13 +258,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
 
         mMap.addMarker(options);
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng).zoom(14).bearing(0).tilt(40).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        doWork = true;
     }
 
 //    private void handleNewLocationFromDB(double longitude, double latitude) {
@@ -317,11 +306,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.location = location;
         handleNewLocation(location);
     }
-
+    public void stopThreads(){
+        th1 = null;
+        th2 = null;
+    }
     public void goBackToProfile(View view) {
         try {
-            th1().interrupt();
-            th2().interrupt();
+            finish();
+            stopThreads();
             if (mGoogleApiClient.isConnected()) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
                 mGoogleApiClient.disconnect();
