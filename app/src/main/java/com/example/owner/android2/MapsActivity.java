@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.icu.util.Currency;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -11,6 +12,8 @@ import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.Button;
 
@@ -25,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -222,7 +226,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 while (true) {
                     otherUsers = new ArrayList<>();
                     FireBaseConnection.LoadFromDB(otherUsers);
-                    Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     LocationManager ss = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                     try {
                         Thread.sleep(5000);
@@ -263,16 +267,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
 
         mMap.addMarker(options);
-//        mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude + 0.02, currentLongitude + 0.02)).icon(BitmapDescriptorFactory.fromResource(R.drawable.event1)));
-//        mMap.addCircle(new CircleOptions()
-//                .center(new LatLng(currentLatitude + 0.02, currentLongitude + 0.02))
-//                .radius(100));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(latLng).zoom(14).bearing(90).tilt(40).build();
+                .target(latLng).zoom(14).bearing(0).tilt(40).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        doWork=true;
+        doWork = true;
     }
 
 //    private void handleNewLocationFromDB(double longitude, double latitude) {
@@ -318,26 +319,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void goBackToProfile(View view) {
-        finish();
         try {
             th1().interrupt();
             th2().interrupt();
+            if (mGoogleApiClient.isConnected()) {
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+                mGoogleApiClient.disconnect();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         Intent intent = new Intent(this, ProfileActivity2.class);
         startActivity(intent);
     }
-    public void refresh(View view) {
-        finish();
-        try {
-            th1().interrupt();
-            th2().interrupt();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
+    @Override
+    public void onBackPressed() {
+        goBackToProfile(view2);
     }
 
 }
@@ -348,24 +345,30 @@ class LongOperation extends AsyncTask<Object, Object, Void> {
     GoogleMap mMap1;
     List<LatLng> listLatLng;
     List<String> nickNamess;
+    List<String> eventName;
+    List<LatLng> listEventsLatLng;
 
     public LongOperation(List<User> otheru, GoogleMap mM) {
         this.otherUsers1 = otheru;
         this.mMap1 = mM;
         listLatLng = new ArrayList<>();
+        listEventsLatLng = new ArrayList<>();
+        eventName = new ArrayList<>();
         nickNamess = new ArrayList<>();
     }
 
     @Override
     protected Void doInBackground(Object... params) {
         listLatLng = new ArrayList<>();
+        listEventsLatLng = new ArrayList<>();
         nickNamess = new ArrayList<>();
-        for (User u : otherUsers1
-                ) {
-            if (u.location.Longitude == 0 && u.location.Latitude == 0) {
-                continue;
-            }
-            if (CurrentUser.getUser().NickName.equals("ADMIN")) {
+        eventName = new ArrayList<>();
+        if (CurrentUser.getUser().NickName.equals("ADMIN")) {
+            for (User u : otherUsers1
+                    ) {
+                if (u.location.Longitude == 0 && u.location.Latitude == 0) {
+                    continue;
+                }
                 if (u.NickName.equals(CurrentUser.getUser().NickName)) {
                     continue;
                 } else {
@@ -373,15 +376,39 @@ class LongOperation extends AsyncTask<Object, Object, Void> {
                     nickNamess.add(u.NickName);
                 }
             }
+            for (EventCompetition event : CurrentUser.events
+                    ) {
+                listEventsLatLng.add(new LatLng(event.location.Latitude, event.location.Longitude));
+                eventName.add(event.Name);
+            }
         }
         return null;
     }
 
     @Override
     protected void onPostExecute(Void result) {
-        for (int i = 0; i < listLatLng.size(); i++) {
-            mMap1.addMarker(new MarkerOptions().position(listLatLng.get(i)).title(nickNamess.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        if (CurrentUser.getUser().NickName.equals("ADMIN")) {
+            for (int i = 0; i < listLatLng.size(); i++) {
+                mMap1.addMarker(new MarkerOptions().position(listLatLng.get(i)).title(nickNamess.get(i))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            }
+            for (int i = 0; i < listEventsLatLng.size(); i++) {
+                mMap1.addMarker(new MarkerOptions().position(listEventsLatLng.get(i)).title(eventName.get(i))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.event1)));
+                mMap1.addCircle(new CircleOptions()
+                        .center(listEventsLatLng.get(i))
+                        .radius(100));
+            }
         }
+        if (CurrentUser.getUser().isSignedForEvent) {
+            mMap1.addMarker(new MarkerOptions().position(
+                    new LatLng(CurrentUser.getEvent().location.Latitude, CurrentUser.getEvent().location.Longitude))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.event1)));
+            mMap1.addCircle(new CircleOptions()
+                    .center(new LatLng(CurrentUser.getEvent().location.Latitude, CurrentUser.getEvent().location.Longitude))
+                    .radius(100));
+        }
+
     }
 
     @Override

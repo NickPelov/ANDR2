@@ -70,7 +70,7 @@ public class EventsActivity extends AppCompatActivity
             li = new ListItem[CurrentUser.users.size()];
             //slots = new String[]{"6/10", "7/10"};
         }
-
+        //CurrentUser.setEvent(CurrentUser.events.get(0));
 
         ArrayAdapter<Object> adapter = new CustomAdapter(this, li);
         list = (ListView) findViewById(R.id.fragment_ListView);

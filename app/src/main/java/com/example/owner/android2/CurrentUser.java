@@ -47,6 +47,11 @@ public class CurrentUser {
 
     public static void setEvent(EventCompetition event) {
         CurrentUser.event = event;
+        if(event!=null){
+            setIsSignedForEvent(true);
+        }
+        else
+            setIsSignedForEvent(false);
     }
 
 
