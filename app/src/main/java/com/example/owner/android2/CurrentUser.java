@@ -11,10 +11,13 @@ import java.util.List;
 
 public class CurrentUser {
     private static User user;
+    private static EventCompetition event;
     private static boolean isLogged = false;
+
     public static List<UserKey> keys = new ArrayList<>();
     public static List<User> users = new ArrayList<>();
     public static List<EventCompetition> events = new ArrayList<>();
+
     public static String UserKey;
 
     public static void sortlist() {
@@ -36,6 +39,16 @@ public class CurrentUser {
     public static User getUser() {
         return user;
     }
+
+
+    public static EventCompetition getEvent() {
+        return event;
+    }
+
+    public static void setEvent(EventCompetition event) {
+        CurrentUser.event = event;
+    }
+
 
     public static void setIsSignedForEvent(boolean bool) {
         if (CurrentUser.getUser() != null) {

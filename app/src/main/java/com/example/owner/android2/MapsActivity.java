@@ -1,68 +1,56 @@
 package com.example.owner.android2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Icon;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.os.AsyncTask;
+import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.QuickContactBadge;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import static android.os.Build.VERSION_CODES.M;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private GoogleMap mMap;
+    public GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
+
     public static final String TAG = MapsActivity.class.getSimpleName();
+
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
     private LocationRequest mLocationRequest;
+
     private LatLng latLng;
-    Thread sendLocationThread;
-    boolean doWork = true;
     Location location = null;
+    Thread sendLocationThread;
+
+    boolean doWork = false;
     int izverg = 1;
+
+    public List<User> otherUsers = new ArrayList<>();
     //    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
 //    private DatabaseReference mUser = mRootRef.child("user");
 //    private DatabaseReference mLocation = mUser.child("location");
@@ -92,7 +80,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(1000)
                 .setFastestInterval(100);
+
         Button bt1 = (Button) findViewById(R.id.buttonBack);
+        Button btnRefersh = (Button) findViewById(R.id.buttonForceRefresh);
+
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,8 +91,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 goBackToProfile(v);
             }
         });
+        btnRefersh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateLocation();
+            }
+        });
+
         mGoogleApiClient.connect();
+        updateLocation();
         th1().start();
+        th2().start();
 //        mConditionLatitude.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
@@ -131,6 +131,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onResume() {
         mGoogleApiClient.connect();
+        updateLocation();
+        th1().start();
+        th2().start();
         super.onResume();
     }
 
@@ -139,6 +142,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
+            try {
+                th1().interrupt();
+                th2().interrupt();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         super.onPause();
     }
@@ -157,12 +166,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
         mMap.setMyLocationEnabled(true);
-
+        updateLocation();
     }
 
     @Override
     public void onConnected(Bundle bundle) {
+        updateLocation();
+    }
 
+    private void updateLocation() {
         boolean fineCoarse = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED;
         boolean coarse = ActivityCompat.checkSelfPermission(this,
@@ -176,11 +188,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         } else {
             try {
-//                if (location == null) {
-//                    location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-//                } else if (location != null) {
-//
-//                }
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
                 location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                 handleNewLocation(location);
@@ -208,6 +215,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    private Thread th2() {
+        return new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    otherUsers = new ArrayList<>();
+                    FireBaseConnection.LoadFromDB(otherUsers);
+                    Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+                    LocationManager ss = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -229,22 +255,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double currentLongitude = location.getLongitude();
         latLng = new LatLng(currentLatitude, currentLongitude);
 
+        mMap.clear();
+        new LongOperation(otherUsers, mMap).execute();
+
         MarkerOptions options = new MarkerOptions()
-                .position(latLng)
+                .position(latLng).title("You are here")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
 
-        mMap.clear();
         mMap.addMarker(options);
-        mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude + 0.02, currentLongitude + 0.02)).icon(BitmapDescriptorFactory.fromResource(R.drawable.event1)));
-        mMap.addCircle(new CircleOptions()
-                .center(new LatLng(currentLatitude + 0.02, currentLongitude + 0.02))
-                .radius(100));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//        mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude + 0.02, currentLongitude + 0.02)).icon(BitmapDescriptorFactory.fromResource(R.drawable.event1)));
+//        mMap.addCircle(new CircleOptions()
+//                .center(new LatLng(currentLatitude + 0.02, currentLongitude + 0.02))
+//                .radius(100));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng).zoom(14).bearing(90).tilt(40).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
+        doWork=true;
     }
 
 //    private void handleNewLocationFromDB(double longitude, double latitude) {
@@ -291,7 +319,76 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void goBackToProfile(View view) {
         finish();
+        try {
+            th1().interrupt();
+            th2().interrupt();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent(this, ProfileActivity2.class);
         startActivity(intent);
+    }
+    public void refresh(View view) {
+        finish();
+        try {
+            th1().interrupt();
+            th2().interrupt();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
+
+}
+
+class LongOperation extends AsyncTask<Object, Object, Void> {
+
+    List<User> otherUsers1;
+    GoogleMap mMap1;
+    List<LatLng> listLatLng;
+    List<String> nickNamess;
+
+    public LongOperation(List<User> otheru, GoogleMap mM) {
+        this.otherUsers1 = otheru;
+        this.mMap1 = mM;
+        listLatLng = new ArrayList<>();
+        nickNamess = new ArrayList<>();
+    }
+
+    @Override
+    protected Void doInBackground(Object... params) {
+        listLatLng = new ArrayList<>();
+        nickNamess = new ArrayList<>();
+        for (User u : otherUsers1
+                ) {
+            if (u.location.Longitude == 0 && u.location.Latitude == 0) {
+                continue;
+            }
+            if (CurrentUser.getUser().NickName.equals("ADMIN")) {
+                if (u.NickName.equals(CurrentUser.getUser().NickName)) {
+                    continue;
+                } else {
+                    listLatLng.add(new LatLng(u.location.Latitude, u.location.Longitude));
+                    nickNamess.add(u.NickName);
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void result) {
+        for (int i = 0; i < listLatLng.size(); i++) {
+            mMap1.addMarker(new MarkerOptions().position(listLatLng.get(i)).title(nickNamess.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }
+    }
+
+    @Override
+    protected void onPreExecute() {
+    }
+
+    @Override
+    protected void onProgressUpdate(Object... values) {
     }
 }
