@@ -2,6 +2,7 @@ package com.example.owner.android2;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,10 +19,14 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EventsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
     private ListView list;
+    private Location loc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,19 +34,47 @@ public class EventsActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String[] names;
+
+        String[] slots;
+        String[] distanceArray;
+        int registeredParticipants;
+        ListItem[] li;
+        Location locationUser=new Location("gosho");
+        loc = new Location("pesho");
+        locationUser.setLatitude(CurrentUser.getUser().location.Latitude);
+        locationUser.setLongitude(CurrentUser.getUser().location.Longitude);
+
+
         if (!CurrentUser.events.isEmpty()){
-            names = new String[CurrentUser.events.size()];
-            for (int i=0;i< names.length;i++){
-                names[i]=CurrentUser.events.get(i).Name;
+            slots = new String[CurrentUser.events.size()];
+            distanceArray = new String[CurrentUser.events.size()];
+            li = new ListItem[CurrentUser.events.size()];
+            for (int i=0;i< slots.length;i++){
+                registeredParticipants=0;
+
+                for(int y=0;y<CurrentUser.events.get(i).Participants.users.size();y++){
+                    if (!CurrentUser.events.get(i).Participants.users.get(y).equals("")){
+                        registeredParticipants++;
+                    }
+                }
+
+                loc.setLongitude(CurrentUser.events.get(i).location.Longitude);
+                loc.setLatitude(CurrentUser.events.get(i).location.Latitude);
+                int distance =(int) loc.distanceTo(locationUser);
+                slots[i]=  registeredParticipants + "/" + CurrentUser.events.get(i).Slots;
+                distanceArray[i] = String.format("%,d",distance)+"m away";
+                li[i] = new ListItem(distanceArray[i],slots[i]);
             }
         }
         else{
-            names = new String[]{"6/10", "7/10"};
+            li = new ListItem[CurrentUser.users.size()];
+            //slots = new String[]{"6/10", "7/10"};
         }
 
 
-        ArrayAdapter<String> adapter = new CustomAdapter(this,names);
+
+
+        ArrayAdapter<Object> adapter = new CustomAdapter(this,li);
         list =(ListView) findViewById(R.id.fragment_ListView);
         list.setAdapter(adapter);
 

@@ -25,10 +25,7 @@ public class AdapterLeaderBoard extends ArrayAdapter<Object> {
 
         super(context,R.layout.fragment_leaderboard_item,li);
     }
-    AdapterLeaderBoard(Context context,String[] am){
 
-        super(context,R.layout.fragment_leaderboard_item,am);
-    }
 
     @NonNull
     @Override
@@ -76,6 +73,11 @@ class ListItem implements Comparable<ListItem>
         this.textview1 = t1;
         this.textview2 = t2;
         this.textview3 = t3;
+    }
+    public ListItem(String t1, String t2)
+    {
+        this.textview1 = t1;
+        this.textview2 = t2;
     }
 //    Collections.sort(list1, new Comparator<ListItem>() {
 //    @Override public int compare(ListItem p1, ListItem p2) {
