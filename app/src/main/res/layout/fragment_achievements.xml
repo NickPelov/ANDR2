@@ -39,19 +39,11 @@
                 android:layout_height="52dp"
                 android:background="@android:color/transparent"
                 android:cropToPadding="true"
+                android:src="@drawable/map4"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true" />
-
-            <TextView
-                android:id="@+id/fragment_txt_place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="UserPlace"
-                android:textSize="12sp"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 
@@ -71,11 +63,34 @@
                 android:text="AchievementName"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:layout_marginLeft="19dp"
-                android:layout_marginStart="19dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@+id/fragment_achievements_name_textView"
+                android:layout_alignStart="@+id/fragment_achievements_name_textView" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/progressBar2"
+                android:layout_alignStart="@+id/progressBar2"
+                android:text="TextView"
+                android:textSize="8sp"
+                android:layout_alignRight="@+id/progressBar2"
+                android:layout_alignEnd="@+id/progressBar2"
+                android:layout_below="@+id/fragment_achievements_name_textView"
+                android:layout_above="@+id/progressBar2" />
+
         </RelativeLayout>
 
         <RelativeLayout
