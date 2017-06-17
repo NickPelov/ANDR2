@@ -7,35 +7,36 @@
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
+        android:id="@+id/relativeLayoutMain"
         android:layout_width="match_parent"
         android:layout_height="61dp">
 
-    <RelativeLayout
-        android:layout_width="60dp"
-        android:layout_height="61dp"
-        android:id="@+id/relativeLayout3">
+        <RelativeLayout
+            android:id="@+id/relativeLayout3"
+            android:layout_width="60dp"
+            android:layout_height="61dp">
 
-        <ImageView
-            android:id="@+id/image_view_leaderboard"
-            style="@android:style/Widget.Holo.Light.ImageButton"
-            android:layout_width="59dp"
-            android:layout_height="52dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/transparent"
-            android:cropToPadding="true" />
+            <ImageView
+                android:id="@+id/image_view_leaderboard"
+                style="@android:style/Widget.Holo.Light.ImageButton"
+                android:layout_width="59dp"
+                android:layout_height="52dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
+                android:cropToPadding="true" />
 
-        <TextView
-            android:id="@+id/fragment_txt_place"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="18dp"
-            android:layout_marginRight="18dp"
-            android:text="UserPlace"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/fragment_txt_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="18dp"
+                android:layout_marginRight="18dp"
+                android:text="UserPlace"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 
@@ -44,24 +45,25 @@
             android:layout_width="175dp"
             android:layout_height="61dp"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/relativeLayout2"
-            android:layout_toRightOf="@+id/relativeLayout3"
-            android:layout_toEndOf="@+id/relativeLayout3">
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/relativeLayout3"
+            android:layout_toRightOf="@+id/relativeLayout3">
 
             <TextView
                 android:id="@+id/fragment_userName_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="UserName"
-                android:textSize="24sp"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:text="UserName"
+                android:textAlignment="center"
+                android:textSize="24sp" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"
-            android:layout_width="150dp"
+            android:layout_width="120dp"
             android:layout_height="61dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
@@ -71,11 +73,11 @@
                 android:id="@+id/fragment_txt_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:text="UserScore"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
+                android:textStyle="bold" />
         </RelativeLayout>
 
     </RelativeLayout>

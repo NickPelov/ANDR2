@@ -16,7 +16,7 @@ public class EventCompetition {
     public boolean isStarted;
     public location location;
 
-    public EventCompetition(String name,boolean isactive,boolean isstarted,Participants psrticipants, FinishedParticipants finishedpsrticipants,int slots,location location1){
+    public EventCompetition(String name, boolean isactive, boolean isstarted, Participants psrticipants, FinishedParticipants finishedpsrticipants, int slots, location location1) {
         this.Name = name;
         this.Participants = psrticipants;
         this.FinishedParticipants = finishedpsrticipants;
@@ -26,24 +26,28 @@ public class EventCompetition {
         this.isStarted = isstarted;
     }
 }
-class Participants{
+
+class Participants {
     public String user1;
     public String user2;
     public String user3;
     public String user4;
     public String user5;
     public List<String> users = new ArrayList<>();
-    public Participants(String u1){
+
+    public Participants(String u1) {
         this.user1 = u1;
     }
-    public Participants(String u1,String u2){
+
+    public Participants(String u1, String u2) {
         this.user1 = u1;
         this.user2 = u2;
         users.add(u1);
         users.add(u2);
 
     }
-    public Participants(String u1,String u2,String u3){
+
+    public Participants(String u1, String u2, String u3) {
         this.user1 = u1;
         this.user2 = u2;
         this.user3 = u3;
@@ -51,7 +55,8 @@ class Participants{
         users.add(u2);
         users.add(u3);
     }
-    public Participants(String u1,String u2,String u3,String u4){
+
+    public Participants(String u1, String u2, String u3, String u4) {
         this.user1 = u1;
         this.user2 = u2;
         this.user3 = u3;
@@ -61,7 +66,8 @@ class Participants{
         users.add(u3);
         users.add(u4);
     }
-    public Participants(String u1,String u2,String u3,String u4,String u5){
+
+    public Participants(String u1, String u2, String u3, String u4, String u5) {
         this.user1 = u1;
         this.user2 = u2;
         this.user3 = u3;
@@ -74,31 +80,37 @@ class Participants{
         users.add(u5);
     }
 }
-class FinishedParticipants{
+
+class FinishedParticipants {
     public String user1;
     public String user2;
     public String user3;
     public String user4;
     public String user5;
-    public FinishedParticipants(String u1){
+
+    public FinishedParticipants(String u1) {
         this.user1 = u1;
     }
-    public FinishedParticipants(String u1,String u2){
+
+    public FinishedParticipants(String u1, String u2) {
         this.user1 = u1;
         this.user2 = u2;
     }
-    public FinishedParticipants(String u1,String u2,String u3){
+
+    public FinishedParticipants(String u1, String u2, String u3) {
         this.user1 = u1;
         this.user2 = u2;
         this.user3 = u3;
     }
-    public FinishedParticipants(String u1,String u2,String u3,String u4){
+
+    public FinishedParticipants(String u1, String u2, String u3, String u4) {
         this.user1 = u1;
         this.user2 = u2;
         this.user3 = u3;
         this.user4 = u4;
     }
-    public FinishedParticipants(String u1,String u2,String u3,String u4,String u5){
+
+    public FinishedParticipants(String u1, String u2, String u3, String u4, String u5) {
         this.user1 = u1;
         this.user2 = u2;
         this.user3 = u3;

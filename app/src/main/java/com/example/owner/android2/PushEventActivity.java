@@ -46,15 +46,15 @@ public class PushEventActivity extends AppCompatActivity
         TextView CurrentLatitude = (TextView) findViewById(R.id.CurrentLatitude);
         TextView CurrentLongitude = (TextView) findViewById(R.id.CurrentLongitude);
 
-        final EditText eventName = (EditText)findViewById(R.id.eventNameText);
-        final EditText eventSlots  = (EditText)findViewById(R.id.SlotsText);
-        final EditText latitudeText = (EditText)findViewById(R.id.LatitudeText);
-        final EditText longitudeText = (EditText)findViewById(R.id.LongitudeText);
-        Button create = (Button)findViewById(R.id.event_push_DB);
+        final EditText eventName = (EditText) findViewById(R.id.eventNameText);
+        final EditText eventSlots = (EditText) findViewById(R.id.SlotsText);
+        final EditText latitudeText = (EditText) findViewById(R.id.LatitudeText);
+        final EditText longitudeText = (EditText) findViewById(R.id.LongitudeText);
+        Button create = (Button) findViewById(R.id.event_push_DB);
 
 
-        CurrentLatitude.setText("Current latitude: "+String.valueOf(CurrentUser.getUser().location.Latitude));
-        CurrentLongitude.setText("Current longitude: "+String.valueOf(CurrentUser.getUser().location.Longitude));
+        CurrentLatitude.setText("Current latitude: " + String.valueOf(CurrentUser.getUser().location.Latitude));
+        CurrentLongitude.setText("Current longitude: " + String.valueOf(CurrentUser.getUser().location.Longitude));
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,25 +65,30 @@ public class PushEventActivity extends AppCompatActivity
                 final double longitude = Double.parseDouble(longitudeText.getText().toString());
                 Participants p;
                 FinishedParticipants fp;
-                switch (slots){
-                    case 1: p = new Participants("");
+                switch (slots) {
+                    case 1:
+                        p = new Participants("");
                         fp = new FinishedParticipants("");
                         break;
-                    case 2:p = new Participants("","");
-                        fp = new FinishedParticipants("","");
+                    case 2:
+                        p = new Participants("", "");
+                        fp = new FinishedParticipants("", "");
                         break;
-                    case 3:p = new Participants("","","");
-                        fp = new FinishedParticipants("","","");
+                    case 3:
+                        p = new Participants("", "", "");
+                        fp = new FinishedParticipants("", "", "");
                         break;
-                    case 4:p = new Participants("","","","");
-                        fp = new FinishedParticipants("","","","");
+                    case 4:
+                        p = new Participants("", "", "", "");
+                        fp = new FinishedParticipants("", "", "", "");
                         break;
-                    default:p = new Participants("","","","","");
-                        fp = new FinishedParticipants("","","","","");
+                    default:
+                        p = new Participants("", "", "", "", "");
+                        fp = new FinishedParticipants("", "", "", "", "");
                         break;
                 }
-                FireBaseConnection.pushNewEvent(name,slots,p,fp,latitude,longitude);
-                Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_LONG).show();
+                FireBaseConnection.pushNewEvent(name, slots, p, fp, latitude, longitude);
+                Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
                 finish();
                 gotoProfile(view2);
             }
@@ -140,7 +145,7 @@ public class PushEventActivity extends AppCompatActivity
         else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();
-        }else if (id == R.id.exit_option) {
+        } else if (id == R.id.exit_option) {
             logoutFromProfile();
         }
 
@@ -149,17 +154,19 @@ public class PushEventActivity extends AppCompatActivity
         return true;
 
     }
+
     //going to the leaderboard
     public void gotoPushEvent(View view) {
         Intent intent = new Intent(this, PushEventActivity.class);
         startActivity(intent);
     }
 
-        //going to the leaderboard
+    //going to the leaderboard
     public void gotoLeaderBoard(View view) {
         Intent intent = new Intent(this, LeaderboardActivity.class);
         startActivity(intent);
     }
+
     //going to the map
     public void gotoMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
@@ -195,6 +202,7 @@ public class PushEventActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -204,7 +212,8 @@ public class PushEventActivity extends AppCompatActivity
         finish();
         gotoProfile(view2);
     }
-    public void logoutFromProfile(){
+
+    public void logoutFromProfile() {
 
         new AlertDialog.Builder(this)
                 .setTitle("Really Log out?")

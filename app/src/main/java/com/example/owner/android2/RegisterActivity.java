@@ -310,6 +310,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
+
     @Override
     public void onBackPressed() {
         RegisterActivity.super.onBackPressed();
@@ -385,9 +386,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 mNickNameView.setError("Nick name already taken");
                 mNickNameView.requestFocus();
             } else {
-                FireBaseConnection.pushNewInstanceUser(mName+i, mEmail+i, mPassword, mNick+i);
+                FireBaseConnection.pushNewInstanceUser(mName + i, mEmail + i, mPassword, mNick + i);
                 finish();
-                Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
                 gotoLogin(View2);
             }
         }
@@ -404,6 +405,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
+
     public void gotoMain(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

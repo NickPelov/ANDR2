@@ -87,7 +87,7 @@ public class SettingsActivity extends AppCompatActivity
 //                gotoPushEvent(view2);
 //                finish();
 //            }
-         else if (id == R.id.leaderboard_option) {
+        else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();
         } else if (id == R.id.exit_option) {

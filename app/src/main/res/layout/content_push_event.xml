@@ -7,15 +7,17 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.owner.android2.PushEventActivity"
     tools:showIn="@layout/app_bar_push_event">
+
     <LinearLayout
         android:id="@+id/email_login_form"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="20dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp">
+        android:padding="20dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="300dp"
             android:layout_height="wrap_content">
@@ -25,8 +27,8 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="Name" />
+                android:hint="Name"
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -39,8 +41,8 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="number"
-                android:hint="Slots" />
+                android:hint="Slots"
+                android:inputType="number" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -53,14 +55,15 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="Latitude" />
+                android:hint="Latitude"
+                android:inputType="textPersonName" />
+
             <TextView
                 android:id="@+id/CurrentLatitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:text="TextView" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -73,14 +76,15 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="Longitude" />
+                android:hint="Longitude"
+                android:inputType="textPersonName" />
+
             <TextView
                 android:id="@+id/CurrentLongitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:text="TextView" />
 
         </android.support.design.widget.TextInputLayout>
 

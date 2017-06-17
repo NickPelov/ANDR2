@@ -16,16 +16,17 @@ import org.w3c.dom.Text;
  */
 
 public class CustomAdapter extends ArrayAdapter<Object> {
-    CustomAdapter(Context context, ListItem li[]){
-        super(context,R.layout.fragment_event_item,li);
+    CustomAdapter(Context context, ListItem li[]) {
+        super(context, R.layout.fragment_event_item, li);
     }
 
     @NonNull
     @Override
-    public View getView(int position,@Nullable View convertView,@NonNull ViewGroup par){
-        if(convertView==null){
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);;
-            convertView = inflater.inflate(R.layout.fragment_event_item,par,false);
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup par) {
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            ;
+            convertView = inflater.inflate(R.layout.fragment_event_item, par, false);
         }
 
 

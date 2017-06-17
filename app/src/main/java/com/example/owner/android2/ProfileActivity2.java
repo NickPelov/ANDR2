@@ -47,7 +47,7 @@ public class ProfileActivity2 extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(CurrentUser.getUser().NickName.equals("ADMIN")) {
+        if (CurrentUser.getUser().NickName.equals("ADMIN")) {
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setVisibility(View.VISIBLE);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +122,7 @@ public class ProfileActivity2 extends AppCompatActivity
         getMenuInflater().inflate(R.menu.activity_profile2_drawer, menu);
         return true;
     }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 //        if(CurrentUser.getUser().Name.equals("ADMIN")){
@@ -132,6 +133,7 @@ public class ProfileActivity2 extends AppCompatActivity
 //        }
         return super.onPrepareOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

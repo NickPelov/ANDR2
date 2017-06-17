@@ -34,6 +34,7 @@ public class LeaderboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
     private ListView list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,24 +47,23 @@ public class LeaderboardActivity extends AppCompatActivity
         String[] scores;
         String[] places;
         ListItem[] list1;
-        if (!CurrentUser.users.isEmpty()){
+        if (!CurrentUser.users.isEmpty()) {
             names = new String[CurrentUser.users.size()];
             scores = new String[CurrentUser.users.size()];
             places = new String[CurrentUser.users.size()];
             list1 = new ListItem[CurrentUser.users.size()];
-            for (int i=0;i< names.length;i++){
-                names[i]=CurrentUser.users.get(i).NickName;
-                scores[i]=String.valueOf(CurrentUser.users.get(i).Score);
-                places[i]= String.valueOf(i+1+".");
+            for (int i = 0; i < names.length; i++) {
+                names[i] = CurrentUser.users.get(i).NickName;
+                scores[i] = String.valueOf(CurrentUser.users.get(i).Score);
+                places[i] = String.valueOf(i + 1 + ".");
 //                Image ii = new Image(BitmapCompat.getAllocationByteCount(new Bitmap(findViewById(R.drawable.achievements))))
-                list1[i] = new ListItem(places[i],names[i],scores[i]);
+                list1[i] = new ListItem(places[i], names[i], scores[i]);
             }
-        }
-        else{
+        } else {
             names = new String[]{"1", "1"};
             scores = new String[]{"1", "1"};
             places = new String[]{"1", "1"};
-            list1 = new ListItem[]{new ListItem("a","a","a")};
+            list1 = new ListItem[]{new ListItem("a", "a", "a")};
         }
 
 //        Arrays.sort(list1, new Comparator<ListItem>() {
@@ -73,8 +73,8 @@ public class LeaderboardActivity extends AppCompatActivity
 //            }
 //        });
 
-        ArrayAdapter<Object> adapter = new AdapterLeaderBoard(this,list1);
-        list =(ListView) findViewById(R.id.leaderboard_list_view);
+        ArrayAdapter<Object> adapter = new AdapterLeaderBoard(this, list1);
+        list = (ListView) findViewById(R.id.leaderboard_list_view);
         list.setAdapter(adapter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -157,6 +157,7 @@ public class LeaderboardActivity extends AppCompatActivity
         Intent intent = new Intent(this, PushEventActivity.class);
         startActivity(intent);
     }
+
     //going to the leaderboard
     public void gotoLeaderBoard(View view) {
         Intent intent = new Intent(this, LeaderboardActivity.class);

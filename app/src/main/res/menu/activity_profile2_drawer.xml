@@ -19,9 +19,9 @@
             android:icon="@mipmap/event_2"
             android:title="Events" />
         <!--<item-->
-            <!--android:id="@+id/push_events_option"-->
-            <!--android:icon="@mipmap/ic_launcher"-->
-            <!--android:title="Create Events"/>-->
+        <!--android:id="@+id/push_events_option"-->
+        <!--android:icon="@mipmap/ic_launcher"-->
+        <!--android:title="Create Events"/>-->
     </group>
 
     <item android:title="Profile">
@@ -31,9 +31,9 @@
                 android:icon="@mipmap/user_pic_2"
                 android:title="Info" />
             <item
-            android:id="@+id/settings_option"
-            android:icon="@mipmap/settings_2"
-            android:title="Settings" />
+                android:id="@+id/settings_option"
+                android:icon="@mipmap/settings_2"
+                android:title="Settings" />
             <item
                 android:id="@+id/exit_option"
                 android:icon="@mipmap/exit_door"

@@ -27,6 +27,7 @@ public class EventsActivity extends AppCompatActivity
     private View view2;
     private ListView list;
     private Location loc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,43 +40,40 @@ public class EventsActivity extends AppCompatActivity
         String[] distanceArray;
         int registeredParticipants;
         ListItem[] li;
-        Location locationUser=new Location("gosho");
+        Location locationUser = new Location("gosho");
         loc = new Location("pesho");
         locationUser.setLatitude(CurrentUser.getUser().location.Latitude);
         locationUser.setLongitude(CurrentUser.getUser().location.Longitude);
 
 
-        if (!CurrentUser.events.isEmpty()){
+        if (!CurrentUser.events.isEmpty()) {
             slots = new String[CurrentUser.events.size()];
             distanceArray = new String[CurrentUser.events.size()];
             li = new ListItem[CurrentUser.events.size()];
-            for (int i=0;i< slots.length;i++){
-                registeredParticipants=0;
+            for (int i = 0; i < slots.length; i++) {
+                registeredParticipants = 0;
 
-                for(int y=0;y<CurrentUser.events.get(i).Participants.users.size();y++){
-                    if (!CurrentUser.events.get(i).Participants.users.get(y).equals("")){
+                for (int y = 0; y < CurrentUser.events.get(i).Participants.users.size(); y++) {
+                    if (!CurrentUser.events.get(i).Participants.users.get(y).equals("")) {
                         registeredParticipants++;
                     }
                 }
 
                 loc.setLongitude(CurrentUser.events.get(i).location.Longitude);
                 loc.setLatitude(CurrentUser.events.get(i).location.Latitude);
-                int distance =(int) loc.distanceTo(locationUser);
-                slots[i]=  registeredParticipants + "/" + CurrentUser.events.get(i).Slots;
-                distanceArray[i] = String.format("%,d",distance)+"m away";
-                li[i] = new ListItem(distanceArray[i],slots[i]);
+                int distance = (int) loc.distanceTo(locationUser);
+                slots[i] = registeredParticipants + "/" + CurrentUser.events.get(i).Slots;
+                distanceArray[i] = String.format("%,d", distance) + "m away";
+                li[i] = new ListItem(distanceArray[i], slots[i]);
             }
-        }
-        else{
+        } else {
             li = new ListItem[CurrentUser.users.size()];
             //slots = new String[]{"6/10", "7/10"};
         }
 
 
-
-
-        ArrayAdapter<Object> adapter = new CustomAdapter(this,li);
-        list =(ListView) findViewById(R.id.fragment_ListView);
+        ArrayAdapter<Object> adapter = new CustomAdapter(this, li);
+        list = (ListView) findViewById(R.id.fragment_ListView);
         list.setAdapter(adapter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -159,11 +157,13 @@ public class EventsActivity extends AppCompatActivity
         Intent intent = new Intent(this, PushEventActivity.class);
         startActivity(intent);
     }
+
     //going to the leaderboard
     public void gotoLeaderBoard(View view) {
         Intent intent = new Intent(this, LeaderboardActivity.class);
         startActivity(intent);
     }
+
     //going to the map
     public void gotoMap(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
@@ -199,6 +199,7 @@ public class EventsActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -208,7 +209,8 @@ public class EventsActivity extends AppCompatActivity
         finish();
         gotoProfile(view2);
     }
-    public void logoutFromProfile(){
+
+    public void logoutFromProfile() {
 
         new AlertDialog.Builder(this)
                 .setTitle("Really Log out?")

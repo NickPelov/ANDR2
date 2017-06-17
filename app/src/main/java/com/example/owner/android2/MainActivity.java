@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -133,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                MainActivity.super.onBackPressed();
-                                finish();
+                        MainActivity.super.onBackPressed();
+                        finish();
                     }
                 }).create().show();
     }

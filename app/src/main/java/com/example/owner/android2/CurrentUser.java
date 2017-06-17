@@ -17,8 +17,8 @@ public class CurrentUser {
     public static List<EventCompetition> events = new ArrayList<>();
     public static String UserKey;
 
-    public static void sortlist(){
-        Collections.sort(users,new MyComparator());
+    public static void sortlist() {
+        Collections.sort(users, new MyComparator());
     }
 
     public static void setLogged(boolean logged) {
@@ -28,24 +28,28 @@ public class CurrentUser {
     public static boolean getLogged() {
         return isLogged;
     }
-    public static void setUsertoNull(){
+
+    public static void setUsertoNull() {
         user = null;
     }
 
     public static User getUser() {
         return user;
     }
-    public static void setIsSignedForEvent(boolean bool){
-        if(CurrentUser.getUser()!=null){
+
+    public static void setIsSignedForEvent(boolean bool) {
+        if (CurrentUser.getUser() != null) {
             CurrentUser.getUser().isSignedForEvent = bool;
         }
     }
-    public static Boolean getIsSignedForEvent(){
-        if(CurrentUser.getUser()!=null){
+
+    public static Boolean getIsSignedForEvent() {
+        if (CurrentUser.getUser() != null) {
             return CurrentUser.getUser().isSignedForEvent;
         }
         return false;
     }
+
     public static void setUser(User user1) {
         user = user1;
     }

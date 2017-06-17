@@ -2,13 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/back3"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/back3"
     tools:context="com.example.owner.android2.RegisterActivity">
 
     <!-- Login progress -->
@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical">
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="250dp"
                 android:layout_height="wrap_content">
@@ -40,8 +41,8 @@
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName"
-                    android:hint="Name" />
+                    android:hint="Name"
+                    android:inputType="textPersonName" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -54,8 +55,8 @@
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName"
-                    android:hint="Public Name (nick name)"/>
+                    android:hint="Public Name (nick name)"
+                    android:inputType="textPersonName" />
 
 
             </android.support.design.widget.TextInputLayout>

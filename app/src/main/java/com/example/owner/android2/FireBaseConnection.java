@@ -38,8 +38,8 @@ public class FireBaseConnection {
                     Double lati = snap.child("location").child("Latitude").getValue(Double.class);
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
 
-                    users.add(new User(name,isSigned, email, nickname, pass,score, new location(lati, longi)));
-                    CurrentUser.keys.add(new UserKey(key,nickname));
+                    users.add(new User(name, isSigned, email, nickname, pass, score, new location(lati, longi)));
+                    CurrentUser.keys.add(new UserKey(key, nickname));
                 }
             }
 
@@ -62,18 +62,18 @@ public class FireBaseConnection {
             DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
             DatabaseReference usersTable = mRootRef.child("users").push();
             String pushId = usersTable.getKey();
-            usersTable.setValue(new User(name,false, email, nickName, password,0, new location(0, 0)));
+            usersTable.setValue(new User(name, false, email, nickName, password, 0, new location(0, 0)));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void pushNewEvent(String name, int slots,Participants participants,FinishedParticipants finishedparticipants, Double latitude, Double longitude) {
+    public static void pushNewEvent(String name, int slots, Participants participants, FinishedParticipants finishedparticipants, Double latitude, Double longitude) {
         try {
             DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
             DatabaseReference usersTable = mRootRef.child("events").push();
             String pushId = usersTable.getKey();
-            usersTable.setValue(new EventCompetition(name,true,false,participants,finishedparticipants,slots,new location(latitude,longitude)));
+            usersTable.setValue(new EventCompetition(name, true, false, participants, finishedparticipants, slots, new location(latitude, longitude)));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class FireBaseConnection {
                     Double lati = snap.child("location").child("Latitude").getValue(Double.class);
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
                     if (nickName1.equals(nickname) && email1.equals(email)) {
-                        user[0] = new User(name,isSigned, email, nickname, pass,score, new location(lati, longi));
+                        user[0] = new User(name, isSigned, email, nickname, pass, score, new location(lati, longi));
                     }
 
                 }
@@ -115,23 +115,23 @@ public class FireBaseConnection {
 
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mUser;
-        for (UserKey u:CurrentUser.keys
-             ) {
-            if(u.NickName.equals(nickName1)){
+        for (UserKey u : CurrentUser.keys
+                ) {
+            if (u.NickName.equals(nickName1)) {
                 mUser = mRootRef.child("users").child(u.Key).child("location");
-                Map<String,Object> taskMap = new HashMap<String,Object>();
+                Map<String, Object> taskMap = new HashMap<String, Object>();
                 taskMap.put("Latitude", longitude);
-                taskMap.put("Longitude",lalitude);
+                taskMap.put("Longitude", lalitude);
                 mUser.updateChildren(taskMap);
             }
         }
     }
 
-    private static String p(int number,DataSnapshot snap){
-        return  snap.child("Participants").child("user"+number).getValue(String.class);
+    private static String p(int number, DataSnapshot snap) {
+        return snap.child("Participants").child("user" + number).getValue(String.class);
     }
 
-    public static void getEvents(final List<EventCompetition> events){
+    public static void getEvents(final List<EventCompetition> events) {
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         mRootRef.child("events").addValueEventListener(new ValueEventListener() {
             @Override
@@ -145,22 +145,27 @@ public class FireBaseConnection {
                     int slots = snap.child("Slots").getValue(int.class);
                     Participants participants;
 
-                    switch (slots){
-                        case 1: participants = new Participants(p(1,snap));
+                    switch (slots) {
+                        case 1:
+                            participants = new Participants(p(1, snap));
                             break;
-                        case 2:participants = new Participants(p(1,snap),p(2,snap));
+                        case 2:
+                            participants = new Participants(p(1, snap), p(2, snap));
                             break;
-                        case 3:participants = new Participants(p(1,snap),p(2,snap),p(3,snap));
+                        case 3:
+                            participants = new Participants(p(1, snap), p(2, snap), p(3, snap));
                             break;
-                        case 4:participants = new Participants(p(1,snap),p(2,snap),p(3,snap),p(4,snap));
+                        case 4:
+                            participants = new Participants(p(1, snap), p(2, snap), p(3, snap), p(4, snap));
                             break;
-                        default:participants = new Participants(p(1,snap),p(2,snap),p(3,snap),p(4,snap),p(5,snap));
+                        default:
+                            participants = new Participants(p(1, snap), p(2, snap), p(3, snap), p(4, snap), p(5, snap));
                             break;
                     }
                     Double lati = snap.child("location").child("Latitude").getValue(Double.class);
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
 
-                    events.add(new EventCompetition(name,isactive,isstarted,participants, finishedparticipants,slots,new location(lati,longi)));
+                    events.add(new EventCompetition(name, isactive, isstarted, participants, finishedparticipants, slots, new location(lati, longi)));
 
                 }
             }
