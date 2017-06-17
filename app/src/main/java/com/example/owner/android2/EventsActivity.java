@@ -17,12 +17,9 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.Locale;
-
 public class EventsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
-    private ListView list;
     private Location loc;
 
     @Override
@@ -35,44 +32,28 @@ public class EventsActivity extends AppCompatActivity
 
         String[] slots;
         String[] distanceArray;
-        int registeredParticipants;
-        ListItem[] li;
-        Location locationUser = new Location("gosho");
-        loc = new Location("pesho");
-        locationUser.setLatitude(CurrentUser.getUser().location.Latitude);
-        locationUser.setLongitude(CurrentUser.getUser().location.Longitude);
+
+        EventCompetition[] li;
+
 
 
         if (!CurrentUser.events.isEmpty()) {
             slots = new String[CurrentUser.events.size()];
             distanceArray = new String[CurrentUser.events.size()];
-            li = new ListItem[CurrentUser.events.size()];
+            li = new EventCompetition[CurrentUser.events.size()];
             for (int i = 0; i < slots.length; i++) {
-                registeredParticipants = 0;
 
-                for (int y = 0; y < CurrentUser.events.get(i).Participants.users.size(); y++) {
-                    if (!CurrentUser.events.get(i).Participants.users.get(y).equals("")) {
-                        registeredParticipants++;
-                    }
-                }
-
-                loc.setLongitude(CurrentUser.events.get(i).location.Longitude);
-                loc.setLatitude(CurrentUser.events.get(i).location.Latitude);
-                int distance = (int) loc.distanceTo(locationUser);
-                slots[i] = registeredParticipants + "/" + CurrentUser.events.get(i).Slots;
-                distanceArray[i] = String.format(Locale.ENGLISH,"%,d", distance) + "m away";
-                li[i] = new ListItem(distanceArray[i], slots[i]);
+                li[i] = CurrentUser.events.get(i);
             }
         } else {
-            li = new ListItem[CurrentUser.users.size()];
+            li = new EventCompetition[CurrentUser.users.size()];
         }
 
 
-        ArrayAdapter<Object> adapter = new CustomAdapter(this, li);
-        list = (ListView) findViewById(R.id.events_ListView);
+        ArrayAdapter<Object> adapter = new EventAdapter(this, li);
+        ListView list = (ListView) findViewById(R.id.events_ListView);
 
         list.setAdapter(adapter);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -225,9 +206,22 @@ public class EventsActivity extends AppCompatActivity
                     }
                 }).create().show();
     }
-
-    public void itemClicked(View view) {
+    public void openEventInfo(View view) {
+        int position = view.getId();
+        EventCompetition event= CurrentUser.events.get(position);
         Intent intent = new Intent(this, EventInfo.class);
+        intent.putExtra("bundle",event);
+//        intent.putExtra("name", event.Name);
+//        intent.putExtra("slots", event.Slots);
+//        intent.putExtra("status", event.isActive);
+//        int i=0;
+//        for (String s : event.Participants.users) {
+//            intent.putExtra("participants"+i, s);
+//            i++;
+//        }
+
+
         startActivity(intent);
     }
+
 }

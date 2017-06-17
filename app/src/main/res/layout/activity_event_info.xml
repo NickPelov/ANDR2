@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.owner.android2.EventInfo">
+    tools:context="com.example.owner.android2.EventInfo"
+    android:id="@+id/event_info">
 
     <RelativeLayout
         android:layout_width="388dp"
-        android:layout_height="514dp"
-        tools:layout_editor_absoluteX="-3dp"
-        tools:layout_editor_absoluteY="-1dp">
+        android:layout_height="514dp">
 
         <TextView
             android:id="@+id/event_name"

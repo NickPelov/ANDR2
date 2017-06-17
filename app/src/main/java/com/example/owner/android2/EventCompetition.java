@@ -1,5 +1,9 @@
 package com.example.owner.android2;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +11,7 @@ import java.util.List;
  * Created by k_vol on 14/06/2017.
  */
 
-public class EventCompetition {
+public class EventCompetition implements Serializable{
     public String Name;
     public Participants Participants;
     public FinishedParticipants FinishedParticipants;
@@ -25,9 +29,10 @@ public class EventCompetition {
         this.isActive = isactive;
         this.isStarted = isstarted;
     }
+
 }
 
-class Participants {
+class Participants implements Serializable {
     public String user1;
     public String user2;
     public String user3;
@@ -81,7 +86,7 @@ class Participants {
     }
 }
 
-class FinishedParticipants {
+class FinishedParticipants implements Serializable{
     public String user1;
     public String user2;
     public String user3;
@@ -117,4 +122,5 @@ class FinishedParticipants {
         this.user4 = u4;
         this.user5 = u5;
     }
+
 }
