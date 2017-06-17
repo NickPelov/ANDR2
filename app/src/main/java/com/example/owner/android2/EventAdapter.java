@@ -30,23 +30,26 @@ public class EventAdapter extends ArrayAdapter<Object> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup par) {
-        if (convertView == null) {
+
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            convertView = inflater.inflate(R.layout.fragment_event_item, par, false);
-            convertView.setId(position);
-        }
+            View view = inflater.inflate(R.layout.fragment_event_item, par, false);
+            view.setId(position);
 
+
+        TextView slots_txt = (TextView) view.findViewById(R.id.fragment_txt_slots);
+        TextView distance_txt = (TextView) view.findViewById(R.id.fragment_textView);
+        Button b = (Button) view.findViewById(R.id.button2);
+        b.setId(position);
         Location locationUser = new Location("gosho");
         Location loc = new Location("pesho");
         locationUser.setLatitude(CurrentUser.getUser().location.Latitude);
         locationUser.setLongitude(CurrentUser.getUser().location.Longitude);
         EventCompetition event = (EventCompetition) getItem(position);
-        TextView slots_txt = (TextView) convertView.findViewById(R.id.fragment_txt_slots);
-        TextView distance_txt = (TextView) convertView.findViewById(R.id.fragment_textView);
+
+        String distanceArray;
         int registeredParticipants = 0;
-        Button b = (Button) convertView.findViewById(R.id.button2);
-        b.setId(position);
+
         if (event != null){
             for (int y = 0; y < event.Participants.users.size(); y++) {
                 if (!event.Participants.users.get(y).equals("")) {
@@ -57,7 +60,17 @@ public class EventAdapter extends ArrayAdapter<Object> {
             loc.setLatitude(event.location.Latitude);
             int distance = (int) loc.distanceTo(locationUser);
             String slots = registeredParticipants + "/" + event.Slots;
-            String distanceArray = String.format(Locale.ENGLISH,"%,d", distance) + "m away";
+
+            if(distance>1000){
+                distanceArray = String.format(Locale.ENGLISH,"%,d", distance/1000) + "km away";
+            }else{
+                distanceArray = String.format(Locale.ENGLISH,"%,d", distance) + "m away";
+            }
+
+
+
+
+
             distance_txt.setText(distanceArray);
             slots_txt.setText(slots);
         }
@@ -65,7 +78,7 @@ public class EventAdapter extends ArrayAdapter<Object> {
 
 
 
-        return convertView;
+        return view;
 
     }
 

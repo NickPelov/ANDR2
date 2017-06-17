@@ -42,6 +42,7 @@ class Participants implements Serializable {
 
     public Participants(String u1) {
         this.user1 = u1;
+        users.add(u1);
     }
 
     public Participants(String u1, String u2) {

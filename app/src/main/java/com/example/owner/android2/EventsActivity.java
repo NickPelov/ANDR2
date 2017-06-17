@@ -49,7 +49,6 @@ public class EventsActivity extends AppCompatActivity
             li = new EventCompetition[CurrentUser.users.size()];
         }
 
-
         ArrayAdapter<Object> adapter = new EventAdapter(this, li);
         ListView list = (ListView) findViewById(R.id.events_ListView);
 
