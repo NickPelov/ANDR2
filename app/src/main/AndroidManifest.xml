@@ -69,11 +69,11 @@
         <activity
             android:name=".RegisterActivity"
             android:label="Register"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ProfileActivity2"
             android:label="@string/title_activity_profile2"
@@ -99,6 +99,7 @@
             android:name=".PushEventActivity"
             android:label="@string/title_activity_push_event"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EventInfo"></activity>
     </application>
 
 </manifest>

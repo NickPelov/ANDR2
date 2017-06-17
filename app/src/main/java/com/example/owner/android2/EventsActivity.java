@@ -4,8 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,8 +17,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
 public class EventsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -63,17 +60,17 @@ public class EventsActivity extends AppCompatActivity
                 loc.setLatitude(CurrentUser.events.get(i).location.Latitude);
                 int distance = (int) loc.distanceTo(locationUser);
                 slots[i] = registeredParticipants + "/" + CurrentUser.events.get(i).Slots;
-                distanceArray[i] = String.format("%,d", distance) + "m away";
+                distanceArray[i] = String.format(Locale.ENGLISH,"%,d", distance) + "m away";
                 li[i] = new ListItem(distanceArray[i], slots[i]);
             }
         } else {
             li = new ListItem[CurrentUser.users.size()];
-            //slots = new String[]{"6/10", "7/10"};
         }
-        //CurrentUser.setEvent(CurrentUser.events.get(0));
+
 
         ArrayAdapter<Object> adapter = new CustomAdapter(this, li);
-        list = (ListView) findViewById(R.id.fragment_ListView);
+        list = (ListView) findViewById(R.id.events_ListView);
+
         list.setAdapter(adapter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -88,6 +85,8 @@ public class EventsActivity extends AppCompatActivity
 
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -225,5 +224,10 @@ public class EventsActivity extends AppCompatActivity
                         gotoMain(view2);
                     }
                 }).create().show();
+    }
+
+    public void itemClicked(View view) {
+        Intent intent = new Intent(this, EventInfo.class);
+        startActivity(intent);
     }
 }

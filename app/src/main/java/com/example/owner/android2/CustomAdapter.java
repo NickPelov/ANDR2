@@ -18,7 +18,9 @@ import org.w3c.dom.Text;
 public class CustomAdapter extends ArrayAdapter<Object> {
     CustomAdapter(Context context, ListItem li[]) {
         super(context, R.layout.fragment_event_item, li);
+
     }
+
 
     @NonNull
     @Override
@@ -40,4 +42,5 @@ public class CustomAdapter extends ArrayAdapter<Object> {
         return convertView;
 
     }
+
 }

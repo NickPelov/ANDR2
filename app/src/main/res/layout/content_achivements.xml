@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.owner.android2.AchivementsActivity"
-    tools:showIn="@layout/app_bar_profile2">
+    tools:showIn="@layout/app_bar_achivements">
 
 </android.support.constraint.ConstraintLayout>
