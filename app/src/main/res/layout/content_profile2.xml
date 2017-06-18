@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/back_profile"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.owner.android2.ProfileActivity2"
+    tools:context="com.example.owner.android2.Activities.ProfileActivity2"
     tools:showIn="@layout/app_bar_profile2">
 
     <ScrollView

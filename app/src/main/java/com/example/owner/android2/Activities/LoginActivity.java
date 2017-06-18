@@ -1,4 +1,4 @@
-package com.example.owner.android2;
+package com.example.owner.android2.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -31,11 +31,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.owner.android2.User.CurrentUser;
+import com.example.owner.android2.FireBaseConnection;
+import com.example.owner.android2.R;
+import com.example.owner.android2.User.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -55,26 +54,23 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserRegisterTask mAuthTask = null;
+    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
-    private EditText mNickNameView;
-    private EditText mNameView;
     private EditText mPasswordView;
     private View mProgressView;
-    private View mRegisterFormView;
+    private View mLoginFormView;
     private View View2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-        mNameView = (EditText) findViewById(R.id.NameText);
-        mNickNameView = (EditText) findViewById(R.id.NickNameText);
+
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -96,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             }
         });
 
-        mRegisterFormView = findViewById(R.id.register_form);
+        mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
 
@@ -157,36 +153,21 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
-        mNickNameView.setError(null);
-        mNameView.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-        String nickName = mNickNameView.getText().toString();
-        String name = mNameView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        //check if name is filled in
-        if (TextUtils.isEmpty(nickName)) {
-            mNickNameView.setError("Please fill in");
-            focusView = mNickNameView;
-            cancel = true;
-        }
-        //check if name is filled in
-        if (TextUtils.isEmpty(name)) {
-            mNameView.setError("Please fill in");
-            focusView = mNameView;
-            cancel = true;
-        }
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError("Please input more than 5 symbols");
+            mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
+
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
@@ -206,7 +187,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserRegisterTask(name, nickName, email, password);
+            mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -218,7 +199,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 5;
+        return password.length() > 1;
     }
 
     /**
@@ -232,12 +213,12 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -253,7 +234,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -290,11 +271,17 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
+    @Override
+    public void onBackPressed() {
+       LoginActivity.super.onBackPressed();
+        gotoMain(View2);
+       finish();
+    }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(RegisterActivity.this,
+                new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -311,34 +298,20 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         int IS_PRIMARY = 1;
     }
 
-    @Override
-    public void onBackPressed() {
-        RegisterActivity.super.onBackPressed();
-        gotoMain(View2);
-        finish();
-    }
-
-
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
-
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
-        private final String mNick;
-        private final String mName;
         private final String mPassword;
         List<User> users;
         int i = 0;
-        int ii = 0;
 
-        UserRegisterTask(String name, String nick, String email, String password) {
+        UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
-            mName = name;
-            mNick = nick;
             users = new ArrayList<>();
         }
 
@@ -355,41 +328,36 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             }
             for (User user : users) {
                 if (user.Email.equals(mEmail)) {
+                    // Account exists, return true if the password matches.
+                    if (user.Password.equals(mPassword)) {
+                        CurrentUser.setUser(user);
+                        i = 0;
+                        return true;
+                    }
+                    i = 0;
+                    return false;
+                } else {
                     i = 2;
                 }
-                if (user.NickName.equals(mNick)) {
-                    ii = 2;
-                }
             }
-            if (ii == 2 && i == 2) {
-                return false;
-            } else if (ii != 2 && i != 2) {
-                return true;
-            } else return false;
-
+            return false;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
-            if (i == 2 && ii == 2) {
-                mEmailView.setError("Email already taken");
+            if (i == 2) {
+                mEmailView.setError(getString(R.string.error_invalid_email));
                 mEmailView.requestFocus();
-                mNickNameView.setError("Nick name already taken");
-                mNickNameView.requestFocus();
-            } else if (i == 2) {
-                mEmailView.setError("Email already taken");
-                mEmailView.requestFocus();
-            } else if (ii == 2) {
-                mNickNameView.setError("Nick name already taken");
-                mNickNameView.requestFocus();
-            } else {
-                FireBaseConnection.pushNewInstanceUser(mName + i, mEmail + i, mPassword, mNick + i);
+            } else if (success) {
+                Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_LONG).show();
+                CurrentUser.setLogged(true);
                 finish();
-                Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
-                gotoLogin(View2);
+                goToProfile(View2);
+            } else {
+                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.requestFocus();
             }
         }
 
@@ -401,8 +369,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     }
 
     //going to the profile
-    public void gotoLogin(View view) {
-        Intent intent = new Intent(this, LoginActivity.class);
+    public void goToProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity2.class);
         startActivity(intent);
     }
 

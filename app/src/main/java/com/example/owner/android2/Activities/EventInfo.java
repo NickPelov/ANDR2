@@ -1,11 +1,13 @@
-package com.example.owner.android2;
+package com.example.owner.android2.Activities;
 
-import android.app.usage.UsageEvents;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.owner.android2.Event.EventCompetition;
+import com.example.owner.android2.R;
 
 public class EventInfo extends AppCompatActivity {
     EventCompetition event;

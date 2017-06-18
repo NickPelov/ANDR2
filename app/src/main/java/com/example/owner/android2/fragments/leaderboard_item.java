@@ -1,4 +1,4 @@
-package com.example.owner.android2;
+package com.example.owner.android2.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,15 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.owner.android2.R;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link achievements.OnFragmentInteractionListener} interface
+ * {@link leaderboard_item.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link achievements#newInstance} factory method to
+ * Use the {@link leaderboard_item#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class achievements extends Fragment {
+public class leaderboard_item extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -28,7 +30,7 @@ public class achievements extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public achievements() {
+    public leaderboard_item() {
         // Required empty public constructor
     }
 
@@ -38,11 +40,11 @@ public class achievements extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment achievements.
+     * @return A new instance of fragment leaderboard_item.
      */
     // TODO: Rename and change types and number of parameters
-    public static achievements newInstance(String param1, String param2) {
-        achievements fragment = new achievements();
+    public static leaderboard_item newInstance(String param1, String param2) {
+        leaderboard_item fragment = new leaderboard_item();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -63,7 +65,7 @@ public class achievements extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_achievements, container, false);
+        return inflater.inflate(R.layout.fragment_leaderboard_item, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

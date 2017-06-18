@@ -39,7 +39,7 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapsActivity"
+            android:name=".Activities.MapsActivity"
             android:label="@string/title_activity_profile" />
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -67,39 +67,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Activities.RegisterActivity"
             android:label="Register"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ProfileActivity2"
+            android:name=".Activities.ProfileActivity2"
             android:label="@string/title_activity_profile2"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".AchivementsActivity"
+            android:name=".Activities.AchivementsActivity"
             android:label="@string/title_activity_achivements"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".EventsActivity"
+            android:name=".Activities.EventsActivity"
             android:label="@string/title_activity_events"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LeaderboardActivity"
+            android:name=".Activities.LeaderboardActivity"
             android:label="@string/title_activity_leaderboard"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PushEventActivity"
+            android:name=".Activities.PushEventActivity"
             android:label="@string/title_activity_push_event"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EventInfo"></activity>
+        <activity android:name=".Activities.EventInfo"></activity>
     </application>
 
 </manifest>

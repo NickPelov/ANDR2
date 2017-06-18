@@ -1,8 +1,11 @@
 package com.example.owner.android2;
 
-import android.icu.text.MessagePattern;
-
-import com.facebook.internal.BoltsMeasurementEventListener;
+import com.example.owner.android2.Event.EventCompetition;
+import com.example.owner.android2.Event.FinishedParticipants;
+import com.example.owner.android2.Event.Participants;
+import com.example.owner.android2.User.CurrentUser;
+import com.example.owner.android2.User.User;
+import com.example.owner.android2.User.UserKey;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +28,7 @@ public class FireBaseConnection {
     public static EventCompetition tempRecord;
 
     public static void LoadFromDB(final List<User> users) {
+        users.clear();
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         mRootRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
@@ -135,8 +139,10 @@ public class FireBaseConnection {
     }
 
     public static void getEvents(final List<EventCompetition> events) {
+        events.clear();
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         mRootRef.child("events").addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snap : dataSnapshot.getChildren()

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.owner.android2.EventInfo"
+    tools:context="com.example.owner.android2.Activities.EventInfo"
     android:id="@+id/event_info">
 
     <LinearLayout

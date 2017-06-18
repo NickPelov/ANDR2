@@ -1,4 +1,4 @@
-package com.example.owner.android2;
+package com.example.owner.android2.Activities;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,7 +15,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,35 +24,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodSession;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.login.widget.ProfilePictureView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.example.owner.android2.User.CurrentUser;
+import com.example.owner.android2.FireBaseConnection;
+import com.example.owner.android2.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Currency;
-import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
 
 public class ProfileActivity2 extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
+
     TextView nickNameTextView;
     TextView emailTextView;
     TextView pointsTextView;
+
     ImageView imageView;
+
     float distance;
-    Thread th1 = t1();
+    Thread NotificationThread = threadNotification();
+
     public static final int RESULT_LOAD_IMAGE = 0;
 
     @Override
@@ -86,10 +78,10 @@ public class ProfileActivity2 extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
-        CurrentUser.events = new ArrayList<>();
+
         FireBaseConnection.getEvents(CurrentUser.events);
-        CurrentUser.users = new ArrayList<>();
         FireBaseConnection.LoadFromDB(CurrentUser.users);
+
         nickNameTextView = (TextView) findViewById(R.id.RetrievedProfileName);
         emailTextView = (TextView) findViewById(R.id.RetrivedProfileEmail);
         pointsTextView = (TextView) findViewById(R.id.RetrievedProfilePoints);
@@ -108,12 +100,12 @@ public class ProfileActivity2 extends AppCompatActivity
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
-        th1.start();
+        NotificationThread.start();
 
 
     }
 
-    public Thread t1() {
+    public Thread threadNotification() {
         return new Thread(new Runnable() {
             @Override
             public void run() {

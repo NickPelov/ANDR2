@@ -9,7 +9,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.owner.android2.MapsActivity" />
+        tools:context="com.example.owner.android2.Activities.MapsActivity" />
     <Button
         android:id="@+id/buttonForceRefresh"
         android:layout_width="wrap_content"

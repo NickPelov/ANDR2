@@ -1,16 +1,9 @@
-package com.example.owner.android2;
+package com.example.owner.android2.Activities;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
-import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,20 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.example.owner.android2.User.CurrentUser;
+import com.example.owner.android2.R;
 
-public class PushEventActivity extends AppCompatActivity
+public class AchivementsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_push_event);
+        setContentView(R.layout.activity_achivements);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,61 +37,7 @@ public class PushEventActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
-
-        TextView CurrentLatitude = (TextView) findViewById(R.id.CurrentLatitude);
-        TextView CurrentLongitude = (TextView) findViewById(R.id.CurrentLongitude);
-
-        final EditText eventName = (EditText) findViewById(R.id.eventNameText);
-        final EditText eventSlots = (EditText) findViewById(R.id.SlotsText);
-        final EditText latitudeText = (EditText) findViewById(R.id.LatitudeText);
-        final EditText longitudeText = (EditText) findViewById(R.id.LongitudeText);
-        Button create = (Button) findViewById(R.id.event_push_DB);
-
-
-        CurrentLatitude.setText("Current latitude: " + String.valueOf(CurrentUser.getUser().location.Latitude));
-        CurrentLongitude.setText("Current longitude: " + String.valueOf(CurrentUser.getUser().location.Longitude));
-
-        create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String name = eventName.getText().toString();
-                final int slots = Integer.parseInt(eventSlots.getText().toString());
-                final double latitude = Double.parseDouble(latitudeText.getText().toString());
-                final double longitude = Double.parseDouble(longitudeText.getText().toString());
-                Participants p;
-                FinishedParticipants fp;
-                switch (slots) {
-                    case 1:
-                        p = new Participants("");
-                        fp = new FinishedParticipants("");
-                        break;
-                    case 2:
-                        p = new Participants("", "");
-                        fp = new FinishedParticipants("", "");
-                        break;
-                    case 3:
-                        p = new Participants("", "", "");
-                        fp = new FinishedParticipants("", "", "");
-                        break;
-                    case 4:
-                        p = new Participants("", "", "", "");
-                        fp = new FinishedParticipants("", "", "", "");
-                        break;
-                    default:
-                        p = new Participants("", "", "", "", "");
-                        fp = new FinishedParticipants("", "", "", "", "");
-                        break;
-                }
-
-                FireBaseConnection.pushNewEvent(name, slots, p, fp, latitude, longitude);
-                Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
-                finish();
-                gotoProfile(view2);
-            }
-        });
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -129,6 +66,7 @@ public class PushEventActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
         if (id == R.id.map_option) {
             gotoMap(view2);
             finish();
@@ -145,10 +83,11 @@ public class PushEventActivity extends AppCompatActivity
             gotoProfile(view2);
             finish();
         }
-//        else if (id == R.id.push_events_option) {
-//            gotoPushEvent(view2);
-//            finish();
-//        }
+//        else if (CurrentUser.getUser().Name.equals("ADMIN")) {
+//            if (id == R.id.push_events_option) {
+//                gotoPushEvent(view2);
+//                finish();
+//            }}
         else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();

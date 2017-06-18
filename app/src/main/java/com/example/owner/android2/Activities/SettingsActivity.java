@@ -1,8 +1,7 @@
-package com.example.owner.android2;
+package com.example.owner.android2.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -14,45 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-public class EventsActivity extends AppCompatActivity
+import com.example.owner.android2.R;
+import com.example.owner.android2.User.CurrentUser;
+
+public class SettingsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
-    private Location loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_events);
+        setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        String[] slots;
-        String[] distanceArray;
-
-        EventCompetition[] li;
-
-
-
-        if (!CurrentUser.events.isEmpty()) {
-            slots = new String[CurrentUser.events.size()];
-            distanceArray = new String[CurrentUser.events.size()];
-            li = new EventCompetition[CurrentUser.events.size()];
-            for (int i = 0; i < slots.length; i++) {
-
-                li[i] = CurrentUser.events.get(i);
-            }
-        } else {
-            li = new EventCompetition[CurrentUser.users.size()];
-        }
-
-        ArrayAdapter<Object> adapter = new EventAdapter(this, li);
-        ListView list = (ListView) findViewById(R.id.events_ListView);
-
-        list.setAdapter(adapter);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -62,11 +37,7 @@ public class EventsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
-
-
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,7 +88,6 @@ public class EventsActivity extends AppCompatActivity
 //                gotoPushEvent(view2);
 //                finish();
 //            }
-//        }
         else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
             finish();
@@ -205,22 +175,4 @@ public class EventsActivity extends AppCompatActivity
                     }
                 }).create().show();
     }
-    public void openEventInfo(View view) {
-        int position = view.getId();
-        EventCompetition event= CurrentUser.events.get(position);
-        Intent intent = new Intent(this, EventInfo.class);
-        intent.putExtra("bundle",event);
-//        intent.putExtra("name", event.Name);
-//        intent.putExtra("slots", event.Slots);
-//        intent.putExtra("status", event.isActive);
-//        int i=0;
-//        for (String s : event.Participants.users) {
-//            intent.putExtra("participants"+i, s);
-//            i++;
-//        }
-
-
-        startActivity(intent);
-    }
-
 }

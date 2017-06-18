@@ -1,8 +1,9 @@
-package com.example.owner.android2;
+package com.example.owner.android2.User;
+
+import com.example.owner.android2.Event.EventCompetition;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ public class CurrentUser {
     private static EventCompetition event;
     private static boolean isLogged = false;
 
-    public static List<UserKey> keys = new ArrayList<>();
+    public static List<com.example.owner.android2.User.UserKey> keys = new ArrayList<>();
     public static List<User> users = new ArrayList<>();
     public static List<EventCompetition> events = new ArrayList<>();
 

@@ -1,7 +1,6 @@
-package com.example.owner.android2;
+package com.example.owner.android2.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.owner.android2.Event.EventCompetition;
+import com.example.owner.android2.R;
+import com.example.owner.android2.User.CurrentUser;
 
 import java.util.Locale;
 
@@ -21,7 +22,7 @@ import java.util.Locale;
  */
 
 public class EventAdapter extends ArrayAdapter<Object> {
-    EventAdapter(Context context, EventCompetition[] events) {
+    public EventAdapter(Context context, EventCompetition[] events) {
         super(context, R.layout.fragment_event_item, events);
 
     }

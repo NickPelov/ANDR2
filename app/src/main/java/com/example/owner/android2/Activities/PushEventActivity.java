@@ -1,14 +1,8 @@
-package com.example.owner.android2;
+package com.example.owner.android2.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,63 +13,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import com.example.owner.android2.Event.FinishedParticipants;
+import com.example.owner.android2.FireBaseConnection;
+import com.example.owner.android2.Event.Participants;
+import com.example.owner.android2.R;
+import com.example.owner.android2.User.CurrentUser;
 
-public class LeaderboardActivity extends AppCompatActivity
+public class PushEventActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private View view2;
-    private ListView list;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leaderboard);
+        setContentView(R.layout.activity_push_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        CurrentUser.sortlist();
-
-        String[] names;
-        String[] scores;
-        String[] places;
-        ListItem[] list1;
-        if (!CurrentUser.users.isEmpty()) {
-            names = new String[CurrentUser.users.size()];
-            scores = new String[CurrentUser.users.size()];
-            places = new String[CurrentUser.users.size()];
-            list1 = new ListItem[CurrentUser.users.size()];
-            for (int i = 0; i < names.length; i++) {
-                names[i] = CurrentUser.users.get(i).NickName;
-                scores[i] = String.valueOf(CurrentUser.users.get(i).Score);
-                places[i] = String.valueOf(i + 1 + ".");
-//                Image ii = new Image(BitmapCompat.getAllocationByteCount(new Bitmap(findViewById(R.drawable.achievements))))
-                list1[i] = new ListItem(places[i], names[i], scores[i]);
-            }
-        } else {
-            names = new String[]{"1", "1"};
-            scores = new String[]{"1", "1"};
-            places = new String[]{"1", "1"};
-            list1 = new ListItem[]{new ListItem("a", "a", "a")};
-        }
-
-//        Arrays.sort(list1, new Comparator<ListItem>() {
-//            @Override
-//            public int compare(ListItem o1, ListItem o2) {
-//                return o1.textview3.compareTo(o2.textview3);
-//            }
-//        });
-
-        ArrayAdapter<Object> adapter = new AdapterLeaderBoard(this, list1);
-        list = (ListView) findViewById(R.id.leaderboard_list_view);
-        list.setAdapter(adapter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,11 +40,64 @@ public class LeaderboardActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
+
+        TextView CurrentLatitude = (TextView) findViewById(R.id.CurrentLatitude);
+        TextView CurrentLongitude = (TextView) findViewById(R.id.CurrentLongitude);
+
+        final EditText eventName = (EditText) findViewById(R.id.eventNameText);
+        final EditText eventSlots = (EditText) findViewById(R.id.SlotsText);
+        final EditText latitudeText = (EditText) findViewById(R.id.LatitudeText);
+        final EditText longitudeText = (EditText) findViewById(R.id.LongitudeText);
+        Button create = (Button) findViewById(R.id.event_push_DB);
+
+
+        CurrentLatitude.setText("Current latitude: " + String.valueOf(CurrentUser.getUser().location.Latitude));
+        CurrentLongitude.setText("Current longitude: " + String.valueOf(CurrentUser.getUser().location.Longitude));
+
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String name = eventName.getText().toString();
+                final int slots = Integer.parseInt(eventSlots.getText().toString());
+                final double latitude = Double.parseDouble(latitudeText.getText().toString());
+                final double longitude = Double.parseDouble(longitudeText.getText().toString());
+                Participants p;
+                FinishedParticipants fp;
+                switch (slots) {
+                    case 1:
+                        p = new Participants("");
+                        fp = new FinishedParticipants("");
+                        break;
+                    case 2:
+                        p = new Participants("", "");
+                        fp = new FinishedParticipants("", "");
+                        break;
+                    case 3:
+                        p = new Participants("", "", "");
+                        fp = new FinishedParticipants("", "", "");
+                        break;
+                    case 4:
+                        p = new Participants("", "", "", "");
+                        fp = new FinishedParticipants("", "", "", "");
+                        break;
+                    default:
+                        p = new Participants("", "", "", "", "");
+                        fp = new FinishedParticipants("", "", "", "", "");
+                        break;
+                }
+
+                FireBaseConnection.pushNewEvent(name, slots, p, fp, latitude, longitude);
+                Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
+                finish();
+                gotoProfile(view2);
+            }
+        });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,7 +126,6 @@ public class LeaderboardActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.map_option) {
             gotoMap(view2);
             finish();
@@ -133,11 +142,9 @@ public class LeaderboardActivity extends AppCompatActivity
             gotoProfile(view2);
             finish();
         }
-//        else if (CurrentUser.getUser().Name.equals("ADMIN")) {
-//            if (id == R.id.push_events_option) {
-//                gotoPushEvent(view2);
-//                finish();
-//            }
+//        else if (id == R.id.push_events_option) {
+//            gotoPushEvent(view2);
+//            finish();
 //        }
         else if (id == R.id.leaderboard_option) {
             gotoLeaderBoard(view2);
