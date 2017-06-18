@@ -53,7 +53,6 @@ public class ProfileActivity2 extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile2);
-        CurrentUser.trimEvents();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (CurrentUser.getUser().NickName.equals("ADMIN")) {

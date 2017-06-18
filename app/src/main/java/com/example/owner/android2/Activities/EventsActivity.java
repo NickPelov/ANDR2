@@ -33,6 +33,9 @@ public class EventsActivity extends AppCompatActivity
         setContentView(R.layout.activity_events);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (CurrentUser.getUser().NickName != "ADMIN"){
+            CurrentUser.trimEvents();
+        }
 
         EventCompetition[] li;
 
@@ -47,6 +50,7 @@ public class EventsActivity extends AppCompatActivity
         }
 
         ArrayAdapter<Object> adapter = new EventAdapter(this, li);
+
         ListView list = (ListView) findViewById(R.id.events_ListView);
 
         list.setAdapter(adapter);
