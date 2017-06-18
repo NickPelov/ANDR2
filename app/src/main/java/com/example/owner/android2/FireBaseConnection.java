@@ -182,13 +182,12 @@ public class FireBaseConnection {
                     tempRecord = events.get(events.size() - 1);
                     isInitial = false;
                 }
-                else if (!tempRecord.Name.equals(events.get(events.size() - 1).Name)) {
-                    if (!isInitial) {
-                        isTrue = true;
-                    } else {
-                        isInitial = true;
+                else if(!isInitial){
+                    tempRecord = events.get(events.size() - 2);
+                    if (!tempRecord.Name.equals(events.get(events.size() - 1).Name)) {
+                            isTrue = true;
+                        }
                     }
-                }
             }
 
             @Override
