@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.owner.android2.User.CurrentUser;
 import com.example.owner.android2.FireBaseConnection;
@@ -74,6 +75,10 @@ public class ProfileActivity2 extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        int position =getIntent().getIntExtra("Position",0);
+        if (position != 0){
+            Toast.makeText(this, "Your position is "+position+"!Congratulations!", Toast.LENGTH_LONG).show();
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);

@@ -1,11 +1,13 @@
 package com.example.owner.android2;
 
+import com.example.owner.android2.Activities.EventsActivity;
 import com.example.owner.android2.Event.EventCompetition;
 import com.example.owner.android2.Event.FinishedParticipants;
 import com.example.owner.android2.Event.Participants;
 import com.example.owner.android2.User.CurrentUser;
 import com.example.owner.android2.User.User;
 import com.example.owner.android2.User.UserKey;
+import com.facebook.appevents.AppEventsConstants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,7 +51,16 @@ public class FireBaseConnection {
 
                     users.add(new User(name, isSigned, email, nickname, pass, score,currentEvent, new location(lati, longi)));
                     CurrentUser.keys.add(new UserKey(key, nickname));
+
                 }
+                if (CurrentUser.getUser()!=null){
+                    for(User user:users){
+                        if (user.NickName.equals(CurrentUser.getUser().NickName)){
+                            CurrentUser.setUser(user);
+                        }
+                    }
+                }
+
             }
 
             @Override
@@ -87,11 +98,40 @@ public class FireBaseConnection {
             e.printStackTrace();
         }
     }
+    public static void participantFinished(int number){
+        final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mEvent;
+        DatabaseReference mUser;
+        DatabaseReference mCurrentEvent;
+        String eventkey="";
+        String userkey="";
+        EventCompetition event = CurrentUser.getEvent();
+        for (UserKey s:CurrentUser.eventkeys){
+            if (event.Name.equals(s.NickName)){
+                eventkey = s.Key;
+            }
+        }
 
+        for (UserKey u : CurrentUser.keys
+                ) {
+            if (u.NickName.equals(CurrentUser.getUser().NickName)) {
+                userkey=u.Key;
+
+            }
+        }
+        mEvent = mRootRef.child("events").child(eventkey).child("FinishedParticipants").child("user"+number);
+        mEvent.setValue(CurrentUser.getUser().NickName);
+        mCurrentEvent = mRootRef.child("users").child(userkey).child("currentEvent");
+        mCurrentEvent.setValue("");
+        mUser = mRootRef.child("users").child(userkey).child("isSignedForEvent");
+        mUser.setValue(false);
+    }
 
     public static void setEventParticipant(EventCompetition event,int number){
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mEvent;
+        DatabaseReference mUser;
+        DatabaseReference mCurrentEvent;
         String eventkey="";
         String userkey="";
         for (UserKey s:CurrentUser.eventkeys){
@@ -99,7 +139,7 @@ public class FireBaseConnection {
                 eventkey = s.Key;
             }
         }
-        DatabaseReference mUser;
+
         for (UserKey u : CurrentUser.keys
                 ) {
             if (u.NickName.equals(CurrentUser.getUser().NickName)) {
@@ -108,6 +148,8 @@ public class FireBaseConnection {
         }
             mEvent = mRootRef.child("events").child(eventkey).child("Participants").child("user"+number);
             mEvent.setValue(CurrentUser.getUser().NickName);
+            mCurrentEvent = mRootRef.child("users").child(userkey).child("currentEvent");
+            mCurrentEvent.setValue(event.Name);
             mUser = mRootRef.child("users").child(userkey).child("isSignedForEvent");
             mUser.setValue(true);
     }
@@ -182,6 +224,13 @@ public class FireBaseConnection {
                             isTrue = true;
                         }
                     }
+                if (CurrentUser.getEvent()!=null){
+                    for(EventCompetition event:events){
+                        if (event.Name.equals(CurrentUser.getEvent().Name)){
+                            CurrentUser.setEvent(event);
+                        }
+                    }
+                }
             }
 
             @Override

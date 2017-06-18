@@ -83,6 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Button bt1 = (Button) findViewById(R.id.buttonBack);
         Button btnRefersh = (Button) findViewById(R.id.buttonForceRefresh);
+        Button finished= (Button)findViewById(R.id.buttonFinish);
 
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +98,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 updateLocation();
             }
         });
-
+        finished.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                participantFinished(v);
+            }
+        });
         mGoogleApiClient.connect();
         updateLocation();
     }
@@ -250,6 +256,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onBackPressed() {
         goBackToProfile(view2);
+    }
+
+    public void participantFinished(View view) {
+        EventCompetition event = CurrentUser.getEvent();
+        int number=0;
+        for (int y = 0; y < event.FinishedParticipants.users.size(); y++) {
+            if (!event.FinishedParticipants.users.get(y).equals("")) {
+                number++;
+            }
+        }
+        FireBaseConnection.participantFinished(number+1);
+        Intent intent = new Intent(this, ProfileActivity2.class);
+        intent.putExtra("Position",number+1);
+        startActivity(intent);
     }
 
 }

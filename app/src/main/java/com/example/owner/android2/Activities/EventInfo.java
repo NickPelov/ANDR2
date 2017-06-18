@@ -88,6 +88,8 @@ public class EventInfo extends AppCompatActivity {
             CurrentUser.getUser().isSignedForEvent = true;
             int number = getNumberOfParticipants() + 1;
             FireBaseConnection.setEventParticipant(eventSignup,number);
+            Intent intent = new Intent(this, ProfileActivity2.class);
+            startActivity(intent);
         }
         else{
             Toast.makeText(this, "You are already signed up for an event", Toast.LENGTH_LONG).show();
