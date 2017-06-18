@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.owner.android2.Event.EventCompetition;
 import com.example.owner.android2.FireBaseConnection;
@@ -53,7 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     Location loc = null;
     Location location = null;
-    Vibrator vibrator;
+    Context vibrator;
     int izverg = 1;
 
     public List<User> otherUsers = new ArrayList<>();
@@ -74,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-         vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+         vibrator = getBaseContext();
         // Create the LocationRequest object
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -342,8 +343,8 @@ class LongOperation extends AsyncTask<Object, Object, Void> {
     private List<LatLng> listEventsLatLng;
     private GoogleMap mMap1;
     Button finish;
-    Vibrator vibrator;
-    public LongOperation(GoogleMap mM,Button b,Vibrator v) {
+    Context vibrator;
+    public LongOperation(GoogleMap mM,Button b,Context v) {
         this.mMap1 = mM;
         this.finish = b;
         this.vibrator = v;
@@ -363,18 +364,7 @@ class LongOperation extends AsyncTask<Object, Object, Void> {
                 eventName.add(event.Name);
             }
         }
-        Location userlocation = new Location("user");
-        Location user2location = new Location("event");
-        userlocation.setLatitude(CurrentUser.getUser().location.Latitude);
-        userlocation.setLongitude(CurrentUser.getUser().location.Longitude);
-        for (User user:CurrentUser.users){
-            user2location.setLongitude(user.location.Longitude);
-            user2location.setLatitude(user.location.Latitude);
-            int distance = (int) user2location.distanceTo(userlocation);
-            if (distance<100){
-                vibrator.vibrate(250);
-            }
-        }
+
 
 
 
@@ -410,6 +400,18 @@ class LongOperation extends AsyncTask<Object, Object, Void> {
                 finish.setVisibility(View.INVISIBLE);
             }else{
                 finish.setVisibility(View.VISIBLE);
+            }
+        }
+        Location userlocation = new Location("user");
+        Location user2location = new Location("event");
+        userlocation.setLatitude(CurrentUser.getUser().location.Latitude);
+        userlocation.setLongitude(CurrentUser.getUser().location.Longitude);
+        for (User user:CurrentUser.users){
+            user2location.setLongitude(user.location.Longitude);
+            user2location.setLatitude(user.location.Latitude);
+            int distance = (int) user2location.distanceTo(userlocation);
+            if (distance<100){
+                Toast.makeText(vibrator, "Someone is near", Toast.LENGTH_SHORT).show();
             }
         }
 
