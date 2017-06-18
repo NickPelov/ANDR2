@@ -97,6 +97,7 @@ public class FireBaseConnection {
                 key = s.Key;
             }
         }
+
             mEvent = mRootRef.child("events").child(key).child("Participants").child("user"+number);
             mEvent.setValue(CurrentUser.getUser().NickName);
     }

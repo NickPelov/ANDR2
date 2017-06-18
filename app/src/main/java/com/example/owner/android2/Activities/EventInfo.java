@@ -38,13 +38,13 @@ public class EventInfo extends AppCompatActivity {
             status.setTextColor(Color.GREEN);
             status.setText("Active");
         }
-        else if (!event.isActive && !event.isStarted){
-            status.setTextColor(Color.GRAY);
-            status.setText("Not Started");
-        }
-        else {
+        else if (!event.isActive && event.isStarted){
             status.setTextColor(Color.RED);
             status.setText("Finished");
+        }
+        else {
+            status.setTextColor(Color.GRAY);
+            status.setText("Not Started");
         }
         String[] s= getParticipants();
         player1.setText(s[0]);
@@ -81,9 +81,10 @@ public class EventInfo extends AppCompatActivity {
         return participants;
     }
     public void registerUserForEvent(View view) {
-        if (CurrentUser.getEvent()!=null){
+        if (!CurrentUser.getUser().isSignedForEvent){
             EventCompetition eventSignup =(EventCompetition) view.getTag();
             CurrentUser.setEvent(eventSignup);
+            CurrentUser.getUser().isSignedForEvent = true;
             int number = getNumberOfParticipants() + 1;
             FireBaseConnection.setEventParticipant(eventSignup,number);
         }
