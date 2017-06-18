@@ -25,13 +25,4 @@
         android:text="register"
         android:textColor="@color/cardview_light_background" />
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="30dp" />
-
-
 </LinearLayout>
