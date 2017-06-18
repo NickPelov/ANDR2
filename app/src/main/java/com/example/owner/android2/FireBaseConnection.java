@@ -28,11 +28,12 @@ public class FireBaseConnection {
     public static EventCompetition tempRecord;
 
     public static void LoadFromDB(final List<User> users) {
-        users.clear();
+
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         mRootRef.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                users.clear();
                 for (DataSnapshot snap : dataSnapshot.getChildren()
                         ) {
                     String key = snap.getKey();
@@ -139,12 +140,12 @@ public class FireBaseConnection {
     }
 
     public static void getEvents(final List<EventCompetition> events) {
-        events.clear();
+
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         mRootRef.child("events").addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                events.clear();
                 for (DataSnapshot snap : dataSnapshot.getChildren()
                         ) {
                     String name = snap.child("Name").getValue(String.class);
@@ -185,7 +186,7 @@ public class FireBaseConnection {
                     if (!isInitial) {
                         isTrue = true;
                     } else {
-                        isInitial = false;
+                        isInitial = true;
                     }
                 }
             }
