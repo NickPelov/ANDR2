@@ -177,8 +177,8 @@ public class FireBaseConnection {
                     isInitial = false;
                 }
                 else{
-                    tempRecord = events.get(events.size() - 2);
                     if (!tempRecord.Name.equals(events.get(events.size() - 1).Name)) {
+                        tempRecord = events.get(events.size() - 1);
                             isTrue = true;
                         }
                     }
