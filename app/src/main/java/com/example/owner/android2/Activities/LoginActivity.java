@@ -322,6 +322,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (isNetworkAvailable()) {
             try {
                 FireBaseConnection.LoadFromDB(CurrentUser.users);
+                FireBaseConnection.getEvents(CurrentUser.events);
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {

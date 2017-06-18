@@ -160,12 +160,6 @@ public class PushEventActivity extends AppCompatActivity
     }
 
     //going to the leaderboard
-    public void gotoPushEvent(View view) {
-        Intent intent = new Intent(this, PushEventActivity.class);
-        startActivity(intent);
-    }
-
-    //going to the leaderboard
     public void gotoLeaderBoard(View view) {
         Intent intent = new Intent(this, LeaderboardActivity.class);
         startActivity(intent);

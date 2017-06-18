@@ -80,9 +80,6 @@ public class ProfileActivity2 extends AppCompatActivity
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FireBaseConnection.getEvents(CurrentUser.events);
-        FireBaseConnection.LoadFromDB(CurrentUser.users);
-
         nickNameTextView = (TextView) findViewById(R.id.RetrievedProfileName);
         emailTextView = (TextView) findViewById(R.id.RetrivedProfileEmail);
         pointsTextView = (TextView) findViewById(R.id.RetrievedProfilePoints);
@@ -101,8 +98,7 @@ public class ProfileActivity2 extends AppCompatActivity
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
-        NotificationThread.start();
-
+           NotificationThread.start();
 
     }
 
@@ -116,9 +112,9 @@ public class ProfileActivity2 extends AppCompatActivity
                         loc1.setLatitude(CurrentUser.getUser().location.Latitude);
                         loc1.setLongitude(CurrentUser.getUser().location.Longitude);
                         Location loc2 = new Location("z");
-                        loc2.setLatitude(CurrentUser.events.get(CurrentUser.events.size()-1).location.Latitude);
-                        loc2.setLongitude(CurrentUser.events.get(CurrentUser.events.size()-1).location.Longitude);
-                        int slots = CurrentUser.events.get(CurrentUser.events.size()-1).Slots;
+                        loc2.setLatitude(CurrentUser.events.get(CurrentUser.events.size() - 1).location.Latitude);
+                        loc2.setLongitude(CurrentUser.events.get(CurrentUser.events.size() - 1).location.Longitude);
+                        int slots = CurrentUser.events.get(CurrentUser.events.size() - 1).Slots;
                         distance = loc1.distanceTo(loc2);
                         showNotification(view2, slots);
                         FireBaseConnection.isTrue = false;
@@ -242,6 +238,8 @@ public class ProfileActivity2 extends AppCompatActivity
 
     //going to the eventoush
     public void gotoPushEvent(View view) {
+        finish();
+        NotificationThread.interrupt();
         Intent intent = new Intent(this, PushEventActivity.class);
         startActivity(intent);
     }
