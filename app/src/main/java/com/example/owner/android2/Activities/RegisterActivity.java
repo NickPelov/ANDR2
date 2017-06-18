@@ -331,7 +331,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         private final String mNick;
         private final String mName;
         private final String mPassword;
-        int i = 0;
+        int emailCheck = 0;
         int ii = 0;
 
         UserRegisterTask(String name, String nick, String email, String password) {
@@ -354,20 +354,20 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 }
                 for (User user : CurrentUser.users) {
                     if (user.Email.equals(mEmail)) {
-                        i = 2;
+                        emailCheck = 2;
                     }
                     if (user.NickName.equals(mNick)) {
                         ii = 2;
                     }
                 }
-                if (ii == 2 && i == 2) {
+                if (ii == 2 && emailCheck == 2) {
                     return false;
-                } else if (ii != 2 && i != 2) {
+                } else if (ii != 2 && emailCheck != 2) {
                     return true;
                 } else return false;
 
             } else {
-                i = 3;
+                emailCheck = 3;
                 return false;
             }
         }
@@ -376,14 +376,14 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            if (i == 3) {
+            if (emailCheck == 3) {
                 Toast.makeText(getBaseContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
-            } else if (i == 2 && ii == 2) {
+            } else if (emailCheck == 2 && ii == 2) {
                 mEmailView.setError("Email already taken");
                 mEmailView.requestFocus();
                 mNickNameView.setError("Nick name already taken");
                 mNickNameView.requestFocus();
-            } else if (i == 2) {
+            } else if (emailCheck == 2) {
                 mEmailView.setError("Email already taken");
                 mEmailView.requestFocus();
             } else if (ii == 2) {

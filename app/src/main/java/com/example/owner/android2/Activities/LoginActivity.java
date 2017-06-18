@@ -338,11 +338,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         }
                         i = 0;
                         return false;
-                    } else {
-                        i = 2;
-                        return false;
                     }
                 }
+                i=2;
                 return false;
             } else {
                 i = 3;
