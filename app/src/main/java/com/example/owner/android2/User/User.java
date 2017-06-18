@@ -1,6 +1,7 @@
 package com.example.owner.android2.User;
 
 import android.location.Location;
+import android.support.annotation.Nullable;
 
 import com.example.owner.android2.location;
 
@@ -19,14 +20,16 @@ public class User {
     public final int Score;
     public com.example.owner.android2.location location;
     public boolean isSignedForEvent;
+    public String currentEvent;
 
-    public User(String name,boolean isSigned, String email, String nickname, String password,int score, location location) {
+    public User(String name, boolean isSigned, String email, String nickname, String password, int score,String currentEvent, location location) {
         this.Name = name;
         this.Email = email;
         this.NickName = nickname;
         this.Password = password;
         this.location = location;
         this.Score = score;
+        this.currentEvent = currentEvent;
         this.isSignedForEvent = isSigned;
     }
 }

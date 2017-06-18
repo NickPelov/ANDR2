@@ -1,5 +1,6 @@
 package com.example.owner.android2.Activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -91,5 +92,11 @@ public class EventInfo extends AppCompatActivity {
         else{
             Toast.makeText(this, "You are already signed up for an event", Toast.LENGTH_LONG).show();
         }
+    }
+    @Override
+    public void onBackPressed(){
+        finish();
+        Intent intent = new Intent(this, EventsActivity.class);
+        startActivity(intent);
     }
 }

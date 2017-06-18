@@ -8,6 +8,7 @@
 			"Password" : "ad",
 			"Score": 100,
 			"isSignedForEvent": false,
+			"currentEvent":"",
 			"location":
 			{
 				"Longitude": 5.47152,
@@ -22,6 +23,33 @@
 			"isActive": true,
 			"isStarted": false,
 			"Slots": 5,
+			"FinishedParticipants":
+			{
+			 "user1": "",
+			 "user2": "",
+			 "user3": "",
+			 "user4": "",
+			 "user5": ""
+			},
+			"Participants":
+			{
+			 "user1": "",
+			 "user2": "",
+			 "user3": "",
+			 "user4": "",
+			 "user5": ""
+			},
+			"location":
+			{
+				"Longitude": 5.47152,
+				"Latitude": 51.4525
+			}
+		},
+		{
+			"Name": "event2",
+			"isActive": true,
+			"isStarted": false,
+			"Slots": 4,
 			"FinishedParticipants":
 			{
 			 "user1": "",

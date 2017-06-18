@@ -41,12 +41,13 @@ public class FireBaseConnection {
                     String email = snap.child("Email").getValue(String.class);
                     boolean isSigned = snap.child("isSignedForEvent").getValue(Boolean.class);
                     String nickname = snap.child("NickName").getValue(String.class);
+                    String currentEvent = snap.child("currentEvent").getValue(String.class);
                     String pass = snap.child("Password").getValue(String.class);
                     int score = snap.child("Score").getValue(Integer.class);
                     Double lati = snap.child("location").child("Latitude").getValue(Double.class);
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
 
-                    users.add(new User(name, isSigned, email, nickname, pass, score, new location(lati, longi)));
+                    users.add(new User(name, isSigned, email, nickname, pass, score,currentEvent, new location(lati, longi)));
                     CurrentUser.keys.add(new UserKey(key, nickname));
                 }
             }
@@ -70,7 +71,7 @@ public class FireBaseConnection {
             DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
             DatabaseReference usersTable = mRootRef.child("users").push();
             String pushId = usersTable.getKey();
-            usersTable.setValue(new User(name, false, email, nickName, password, 0, new location(0, 0)));
+            usersTable.setValue(new User(name, false, email, nickName, password, 0,"", new location(0, 0)));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,48 +92,24 @@ public class FireBaseConnection {
     public static void setEventParticipant(EventCompetition event,int number){
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mEvent;
-        String key="";
+        String eventkey="";
+        String userkey="";
         for (UserKey s:CurrentUser.eventkeys){
             if (event.Name.equals(s.NickName)){
-                key = s.Key;
+                eventkey = s.Key;
             }
         }
-
-            mEvent = mRootRef.child("events").child(key).child("Participants").child("user"+number);
+        DatabaseReference mUser;
+        for (UserKey u : CurrentUser.keys
+                ) {
+            if (u.NickName.equals(CurrentUser.getUser().NickName)) {
+                userkey=u.Key;
+            }
+        }
+            mEvent = mRootRef.child("events").child(eventkey).child("Participants").child("user"+number);
             mEvent.setValue(CurrentUser.getUser().NickName);
-    }
-
-
-    //neznam dali raboti
-    public static User getUser(final String nickName1, final String email1) {
-        DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-        final User[] user = {null};
-        mRootRef.child("users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snap : dataSnapshot.getChildren()
-                        ) {
-                    String name = snap.child("Name").getValue(String.class);
-                    String email = snap.child("Email").getValue(String.class);
-                    boolean isSigned = snap.child("isSignedForEvent").getValue(Boolean.class);
-                    String nickname = snap.child("NickName").getValue(String.class);
-                    String pass = snap.child("Password").getValue(String.class);
-                    int score = snap.child("Score").getValue(Integer.class);
-                    Double lati = snap.child("location").child("Latitude").getValue(Double.class);
-                    Double longi = snap.child("location").child("Longitude").getValue(Double.class);
-                    if (nickName1.equals(nickname) && email1.equals(email)) {
-                        user[0] = new User(name, isSigned, email, nickname, pass, score, new location(lati, longi));
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-
-        });
-        return user[0];
+            mUser = mRootRef.child("users").child(userkey).child("isSignedForEvent");
+            mUser.setValue(true);
     }
 
     public static void setUserLocation(final String nickName1, final String email1, final Double longitude, final Double lalitude) {
@@ -199,7 +176,7 @@ public class FireBaseConnection {
                     tempRecord = events.get(events.size() - 1);
                     isInitial = false;
                 }
-                else if(!isInitial){
+                else{
                     tempRecord = events.get(events.size() - 2);
                     if (!tempRecord.Name.equals(events.get(events.size() - 1).Name)) {
                             isTrue = true;
