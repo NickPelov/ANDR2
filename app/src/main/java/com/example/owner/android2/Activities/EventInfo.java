@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.owner.android2.Event.EventCompetition;
 import com.example.owner.android2.FireBaseConnection;
@@ -80,9 +81,14 @@ public class EventInfo extends AppCompatActivity {
         return participants;
     }
     public void registerUserForEvent(View view) {
-        EventCompetition eventSignup =(EventCompetition) view.getTag();
-        CurrentUser.setEvent(eventSignup);
-        int number = getNumberOfParticipants() + 1;
-        FireBaseConnection.setEventParticipant(eventSignup,number);
+        if (CurrentUser.getEvent()!=null){
+            EventCompetition eventSignup =(EventCompetition) view.getTag();
+            CurrentUser.setEvent(eventSignup);
+            int number = getNumberOfParticipants() + 1;
+            FireBaseConnection.setEventParticipant(eventSignup,number);
+        }
+        else{
+            Toast.makeText(this, "You are already signed up for an event", Toast.LENGTH_LONG).show();
+        }
     }
 }
