@@ -41,9 +41,9 @@ public class SignUpForEventTest {
             onView(withId(R.id.email_login_form)).check(matches(isDisplayed()));
 
             onView(withId(R.id.email))
-                    .perform(typeText("y@"), closeSoftKeyboard());
+                    .perform(typeText("izverg@"), closeSoftKeyboard());
             onView(withId(R.id.password))
-                    .perform(typeText("takataka"), closeSoftKeyboard());
+                    .perform(typeText("azsumizverg"), closeSoftKeyboard());
             onView(withId(R.id.email_sign_in_button)).perform(click());
 
             onView(withText("Nick Name")).check(matches(isDisplayed()));
