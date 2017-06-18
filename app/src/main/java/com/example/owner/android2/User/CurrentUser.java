@@ -1,5 +1,7 @@
 package com.example.owner.android2.User;
 
+import android.location.Location;
+
 import com.example.owner.android2.Event.EventCompetition;
 
 import java.util.ArrayList;
@@ -73,4 +75,28 @@ public class CurrentUser {
         user = user1;
     }
 
+    public static void trimEvents(){
+        int size = CurrentUser.events.size();
+        int y=0;
+        int[] distance = new int[size];
+        Location userlocation = new Location("user");
+        Location eventlocation = new Location("event");
+        userlocation.setLatitude(CurrentUser.getUser().location.Latitude);
+        userlocation.setLongitude(CurrentUser.getUser().location.Longitude);
+        for (int i = 0;i<size;i++){
+            EventCompetition currentevent=CurrentUser.events.get(i);
+            eventlocation.setLongitude(currentevent.location.Longitude);
+            eventlocation.setLatitude(currentevent.location.Latitude);
+            distance[i] = (int) eventlocation.distanceTo(userlocation);
+        }
+        for (int i = 0;i<size;i++){
+            if (distance[i]>10000){
+                CurrentUser.events.remove(y);
+            }
+            else{
+                y++;
+            }
+        }
+
+    }
 }

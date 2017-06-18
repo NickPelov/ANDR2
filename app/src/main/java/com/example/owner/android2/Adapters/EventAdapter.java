@@ -42,13 +42,13 @@ public class EventAdapter extends ArrayAdapter<Object> {
         TextView distance_txt = (TextView) view.findViewById(R.id.fragment_textView);
         Button b = (Button) view.findViewById(R.id.button2);
         b.setId(position);
-        Location locationUser = new Location("gosho");
-        Location loc = new Location("pesho");
-        locationUser.setLatitude(CurrentUser.getUser().location.Latitude);
-        locationUser.setLongitude(CurrentUser.getUser().location.Longitude);
+        Location userlocation = new Location("user");
+        Location eventlocation = new Location("event");
+        userlocation.setLatitude(CurrentUser.getUser().location.Latitude);
+        userlocation.setLongitude(CurrentUser.getUser().location.Longitude);
         EventCompetition event = (EventCompetition) getItem(position);
 
-        String distanceArray;
+        String distanceAway;
         int registeredParticipants = 0;
 
         if (event != null){
@@ -57,22 +57,22 @@ public class EventAdapter extends ArrayAdapter<Object> {
                     registeredParticipants++;
                 }
             }
-            loc.setLongitude(event.location.Longitude);
-            loc.setLatitude(event.location.Latitude);
-            int distance = (int) loc.distanceTo(locationUser);
+            eventlocation.setLongitude(event.location.Longitude);
+            eventlocation.setLatitude(event.location.Latitude);
+            int distance = (int) eventlocation.distanceTo(userlocation);
             String slots = registeredParticipants + "/" + event.Slots;
 
             if(distance>1000){
-                distanceArray = String.format(Locale.ENGLISH,"%,d", distance/1000) + "km away";
+                distanceAway = String.format(Locale.ENGLISH,"%,d", distance/1000) + "km away";
             }else{
-                distanceArray = String.format(Locale.ENGLISH,"%,d", distance) + "m away";
+                distanceAway = String.format(Locale.ENGLISH,"%,d", distance) + "m away";
             }
 
 
 
 
 
-            distance_txt.setText(distanceArray);
+            distance_txt.setText(distanceAway);
             slots_txt.setText(slots);
         }
 

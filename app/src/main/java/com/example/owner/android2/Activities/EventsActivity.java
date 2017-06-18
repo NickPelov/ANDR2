@@ -34,19 +34,11 @@ public class EventsActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        String[] slots;
-        String[] distanceArray;
-
         EventCompetition[] li;
 
-
-
         if (!CurrentUser.events.isEmpty()) {
-            slots = new String[CurrentUser.events.size()];
-            distanceArray = new String[CurrentUser.events.size()];
             li = new EventCompetition[CurrentUser.events.size()];
-            for (int i = 0; i < slots.length; i++) {
+            for (int i = 0; i < CurrentUser.events.size(); i++) {
 
                 li[i] = CurrentUser.events.get(i);
             }
