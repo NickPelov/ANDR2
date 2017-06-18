@@ -173,7 +173,9 @@ public class FireBaseConnection {
     private static String p(int number, DataSnapshot snap) {
         return snap.child("Participants").child("user" + number).getValue(String.class);
     }
-
+    private static String f(int number, DataSnapshot snap) {
+        return snap.child("FinishedParticipants").child("user" + number).getValue(String.class);
+    }
     public static void getEvents(final List<EventCompetition> events) {
 
         final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -191,6 +193,23 @@ public class FireBaseConnection {
                     int slots = snap.child("Slots").getValue(int.class);
                     Participants participants;
 
+                    switch (slots) {
+                        case 1:
+                            finishedparticipants = new FinishedParticipants(f(1, snap));
+                            break;
+                        case 2:
+                            finishedparticipants = new FinishedParticipants(f(1, snap), f(2, snap));
+                            break;
+                        case 3:
+                            finishedparticipants = new FinishedParticipants(f(1, snap), f(2, snap), f(3, snap));
+                            break;
+                        case 4:
+                            finishedparticipants = new FinishedParticipants(f(1, snap), f(2, snap), f(3, snap), f(4, snap));
+                            break;
+                        default:
+                            finishedparticipants = new FinishedParticipants(f(1, snap), f(2, snap), f(3, snap), f(4, snap), f(5, snap));
+                            break;
+                    }
                     switch (slots) {
                         case 1:
                             participants = new Participants(p(1, snap));
