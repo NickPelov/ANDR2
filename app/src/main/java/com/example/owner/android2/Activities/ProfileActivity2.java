@@ -117,7 +117,6 @@ public class ProfileActivity2 extends AppCompatActivity
                         distance = loc1.distanceTo(loc2);
                         showNotification(view2, slots);
                         FireBaseConnection.isTrue = false;
-                        FireBaseConnection.isInitial = true;
                     }
                     try {
                         Thread.sleep(5000);
