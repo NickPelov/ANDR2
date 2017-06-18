@@ -53,11 +53,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     Location loc = null;
     Location location = null;
-
+    Vibrator vibrator;
     int izverg = 1;
 
     public List<User> otherUsers = new ArrayList<>();
-
+    public Button finished;
     View view2;
 
     @Override
@@ -74,7 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
+         vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         // Create the LocationRequest object
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -83,7 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Button bt1 = (Button) findViewById(R.id.buttonBack);
         Button btnRefersh = (Button) findViewById(R.id.buttonForceRefresh);
-        Button finished= (Button)findViewById(R.id.buttonFinish);
+        finished= (Button)findViewById(R.id.buttonFinish);
 
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,7 +184,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.clear();
         new LoadDB(location, loc,mMap).execute();
-        new LongOperation(mMap).execute();
+        new LongOperation(mMap,finished,vibrator).execute();
         MarkerOptions options = new MarkerOptions()
                 .position(latLng).title("You are here")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
@@ -341,9 +341,12 @@ class LongOperation extends AsyncTask<Object, Object, Void> {
     private List<String> eventName;
     private List<LatLng> listEventsLatLng;
     private GoogleMap mMap1;
-
-    public LongOperation(GoogleMap mM) {
+    Button finish;
+    Vibrator vibrator;
+    public LongOperation(GoogleMap mM,Button b,Vibrator v) {
         this.mMap1 = mM;
+        this.finish = b;
+        this.vibrator = v;
         listEventsLatLng = new ArrayList<>();
         eventName = new ArrayList<>();
 
@@ -360,6 +363,21 @@ class LongOperation extends AsyncTask<Object, Object, Void> {
                 eventName.add(event.Name);
             }
         }
+        Location userlocation = new Location("user");
+        Location user2location = new Location("event");
+        userlocation.setLatitude(CurrentUser.getUser().location.Latitude);
+        userlocation.setLongitude(CurrentUser.getUser().location.Longitude);
+        for (User user:CurrentUser.users){
+            user2location.setLongitude(user.location.Longitude);
+            user2location.setLatitude(user.location.Latitude);
+            int distance = (int) user2location.distanceTo(userlocation);
+            if (distance<100){
+                vibrator.vibrate(250);
+            }
+        }
+
+
+
         return null;
     }
 
@@ -381,6 +399,18 @@ class LongOperation extends AsyncTask<Object, Object, Void> {
             mMap1.addCircle(new CircleOptions()
                     .center(new LatLng(CurrentUser.getEvent().location.Latitude, CurrentUser.getEvent().location.Longitude))
                     .radius(100));
+            Location userlocation = new Location("user");
+            Location eventlocation = new Location("event");
+            userlocation.setLatitude(CurrentUser.getUser().location.Latitude);
+            userlocation.setLongitude(CurrentUser.getUser().location.Longitude);
+            eventlocation.setLongitude(CurrentUser.getEvent().location.Longitude);
+            eventlocation.setLatitude(CurrentUser.getEvent().location.Latitude);
+            int distance = (int) eventlocation.distanceTo(userlocation);
+            if (distance>100){
+                finish.setVisibility(View.INVISIBLE);
+            }else{
+                finish.setVisibility(View.VISIBLE);
+            }
         }
 
     }
