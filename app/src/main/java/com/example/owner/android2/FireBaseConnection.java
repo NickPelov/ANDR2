@@ -87,6 +87,21 @@ public class FireBaseConnection {
         }
     }
 
+
+    public static void setEventParticipant(EventCompetition event,int number){
+        final DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mEvent;
+        String key="";
+        for (UserKey s:CurrentUser.eventkeys){
+            if (event.Name.equals(s.NickName)){
+                key = s.Key;
+            }
+        }
+            mEvent = mRootRef.child("events").child(key).child("Participants").child("user"+number);
+            mEvent.setValue(CurrentUser.getUser().NickName);
+    }
+
+
     //neznam dali raboti
     public static User getUser(final String nickName1, final String email1) {
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -149,6 +164,7 @@ public class FireBaseConnection {
                 for (DataSnapshot snap : dataSnapshot.getChildren()
                         ) {
                     String name = snap.child("Name").getValue(String.class);
+                    String key = snap.getKey();
                     boolean isactive = snap.child("isActive").getValue(Boolean.class);
                     Boolean isstarted = snap.child("isStarted").getValue(Boolean.class);
                     FinishedParticipants finishedparticipants = new FinishedParticipants("");
@@ -176,7 +192,7 @@ public class FireBaseConnection {
                     Double longi = snap.child("location").child("Longitude").getValue(Double.class);
 
                     events.add(new EventCompetition(name, isactive, isstarted, participants, finishedparticipants, slots, new location(lati, longi)));
-
+                    CurrentUser.eventkeys.add(new UserKey(key, name));
                 }
                 if (isInitial) {
                     tempRecord = events.get(events.size() - 1);

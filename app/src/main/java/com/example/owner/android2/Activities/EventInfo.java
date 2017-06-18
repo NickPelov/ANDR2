@@ -3,12 +3,12 @@ package com.example.owner.android2.Activities;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ButtonBarLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.owner.android2.Event.EventCompetition;
+import com.example.owner.android2.FireBaseConnection;
 import com.example.owner.android2.R;
 import com.example.owner.android2.User.CurrentUser;
 
@@ -41,7 +41,7 @@ public class EventInfo extends AppCompatActivity {
             status.setTextColor(Color.GRAY);
             status.setText("Not Started");
         }
-        else if (!event.isActive && event.isStarted){
+        else {
             status.setTextColor(Color.RED);
             status.setText("Finished");
         }
@@ -79,9 +79,10 @@ public class EventInfo extends AppCompatActivity {
         }
         return participants;
     }
-
     public void registerUserForEvent(View view) {
         EventCompetition eventSignup =(EventCompetition) view.getTag();
         CurrentUser.setEvent(eventSignup);
+        int number = getNumberOfParticipants() + 1;
+        FireBaseConnection.setEventParticipant(eventSignup,number);
     }
 }

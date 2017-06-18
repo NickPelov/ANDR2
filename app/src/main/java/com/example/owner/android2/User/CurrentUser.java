@@ -18,6 +18,7 @@ public class CurrentUser {
     private static boolean isLogged = false;
 
     public static List<com.example.owner.android2.User.UserKey> keys = new ArrayList<>();
+    public static List<com.example.owner.android2.User.UserKey> eventkeys = new ArrayList<>();
     public static List<User> users = new ArrayList<>();
     public static List<EventCompetition> events = new ArrayList<>();
 
