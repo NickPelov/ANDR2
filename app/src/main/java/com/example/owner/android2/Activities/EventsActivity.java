@@ -33,7 +33,7 @@ public class EventsActivity extends AppCompatActivity
         setContentView(R.layout.activity_events);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (CurrentUser.getUser().NickName != "ADMIN"){
+        if (!CurrentUser.getUser().NickName.equals("ADMIN")){
             CurrentUser.trimEvents();
         }
 

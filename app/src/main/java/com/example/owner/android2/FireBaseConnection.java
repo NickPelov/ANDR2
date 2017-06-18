@@ -22,7 +22,7 @@ import java.util.Map;
  */
 
 public class FireBaseConnection {
-
+    public static boolean isLoggedForFirstTime = true;
     public static boolean isInitial = true;
     public static boolean isTrue = false;
     public static EventCompetition tempRecord;
