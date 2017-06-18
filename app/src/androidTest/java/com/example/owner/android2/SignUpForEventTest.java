@@ -36,36 +36,42 @@ public class SignUpForEventTest {
 
     @Test
     public void sign_up_for_event() {
-        onView(withId(R.id.login_button_main)).perform(click());
-        onView(withId(R.id.email_login_form)).check(matches(isDisplayed()));
+        try{
+            onView(withId(R.id.login_button_main)).perform(click());
+            onView(withId(R.id.email_login_form)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.email))
-                .perform(typeText("y@"), closeSoftKeyboard());
-        onView(withId(R.id.password))
-                .perform(typeText("takataka"), closeSoftKeyboard());
-        onView(withId(R.id.email_sign_in_button)).perform(click());
+            onView(withId(R.id.email))
+                    .perform(typeText("y@"), closeSoftKeyboard());
+            onView(withId(R.id.password))
+                    .perform(typeText("takataka"), closeSoftKeyboard());
+            onView(withId(R.id.email_sign_in_button)).perform(click());
 
-        onView(withText("Nick Name")).check(matches(isDisplayed()));
+            onView(withText("Nick Name")).check(matches(isDisplayed()));
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        withParent(withId(R.id.toolbar)),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
+            ViewInteraction appCompatImageButton = onView(
+                    allOf(withContentDescription("Open navigation drawer"),
+                            withParent(withId(R.id.toolbar)),
+                            isDisplayed()));
+            appCompatImageButton.perform(click());
 
-        ViewInteraction appCompatCheckedTextView = onView(
-                allOf(withId(R.id.design_menu_item_text), withText("Events"), isDisplayed()));
-        appCompatCheckedTextView.perform(click());
+            ViewInteraction appCompatCheckedTextView = onView(
+                    allOf(withId(R.id.design_menu_item_text), withText("Events"), isDisplayed()));
+            appCompatCheckedTextView.perform(click());
 
-        ViewInteraction appCompatButton3 = onView(
-                allOf(withText("More"), isDisplayed()));
-        appCompatButton3.perform(click());
+            ViewInteraction appCompatButton3 = onView(
+                    allOf(withText("More"), isDisplayed()));
+            appCompatButton3.perform(click());
 
-        ViewInteraction appCompatButton4 = onView(
-                allOf(withId(R.id.event_signup), withText("Sign Up"),
-                        withParent(allOf(withId(R.id.relativeLayout4),
-                                withParent(withId(R.id.event_info)))),
-                        isDisplayed()));
-        appCompatButton4.perform(click());
+            ViewInteraction appCompatButton4 = onView(
+                    allOf(withId(R.id.event_signup), withText("Sign Up"),
+                            withParent(allOf(withId(R.id.relativeLayout4),
+                                    withParent(withId(R.id.event_info)))),
+                            isDisplayed()));
+            appCompatButton4.perform(click());
+        }
+        catch (Exception e){
+            ViewInteraction appCompatButton3 = onView(
+                    allOf(withText("More"), isDisplayed()));
+        }
     }
 }
