@@ -31,6 +31,7 @@ import com.example.owner.android2.User.CurrentUser;
 import com.example.owner.android2.FireBaseConnection;
 import com.example.owner.android2.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ProfileActivity2 extends AppCompatActivity
@@ -138,7 +139,7 @@ public class ProfileActivity2 extends AppCompatActivity
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_icon2)
                 .setContentTitle("There is a new event for " + slot + " people")
-                .setContentText("it is " + String.format("%,2f", distance / 1000) + "km away!");
+                .setContentText("it is " + new DecimalFormat("#.##").format(distance) + "km away!");
         Intent resultIntent = new Intent(this, EventsActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(EventsActivity.class);

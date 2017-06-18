@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,7 @@ import android.widget.Toast;
 
 import com.example.owner.android2.FireBaseConnection;
 import com.example.owner.android2.R;
+import com.example.owner.android2.User.CurrentUser;
 import com.example.owner.android2.User.User;
 
 import java.util.ArrayList;
@@ -181,13 +184,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         }
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError("Please input more than 5 symbols");
+            mPasswordView.setError("Password needs to be more than 6 symbols");
             focusView = mPasswordView;
             cancel = true;
         }
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
+            mEmailView.setError("Please fill in");
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
@@ -328,7 +331,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         private final String mNick;
         private final String mName;
         private final String mPassword;
-        List<User> users;
         int i = 0;
         int ii = 0;
 
@@ -337,42 +339,46 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             mPassword = password;
             mName = name;
             mNick = nick;
-            users = new ArrayList<>();
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            if (isNetworkAvailable()) {
+                try {
+                    FireBaseConnection.LoadFromDB(CurrentUser.users);
+                    // Simulate network access.
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    return false;
+                }
+                for (User user : CurrentUser.users) {
+                    if (user.Email.equals(mEmail)) {
+                        i = 2;
+                    }
+                    if (user.NickName.equals(mNick)) {
+                        ii = 2;
+                    }
+                }
+                if (ii == 2 && i == 2) {
+                    return false;
+                } else if (ii != 2 && i != 2) {
+                    return true;
+                } else return false;
 
-            try {
-                FireBaseConnection.LoadFromDB(users);
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+            } else {
+                i = 3;
                 return false;
             }
-            for (User user : users) {
-                if (user.Email.equals(mEmail)) {
-                    i = 2;
-                }
-                if (user.NickName.equals(mNick)) {
-                    ii = 2;
-                }
-            }
-            if (ii == 2 && i == 2) {
-                return false;
-            } else if (ii != 2 && i != 2) {
-                return true;
-            } else return false;
-
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
-            if (i == 2 && ii == 2) {
+            if (i == 3) {
+                Toast.makeText(getBaseContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
+            } else if (i == 2 && ii == 2) {
                 mEmailView.setError("Email already taken");
                 mEmailView.requestFocus();
                 mNickNameView.setError("Nick name already taken");
@@ -407,6 +413,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     public void gotoMain(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
 

@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -271,11 +273,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
+
     @Override
     public void onBackPressed() {
-       LoginActivity.super.onBackPressed();
+        LoginActivity.super.onBackPressed();
         gotoMain(View2);
-       finish();
+        finish();
     }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
@@ -306,52 +309,58 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-        List<User> users;
         int i = 0;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
-            users = new ArrayList<>();
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
+            if (isNetworkAvailable()) {
             try {
-                FireBaseConnection.LoadFromDB(users);
+                FireBaseConnection.LoadFromDB(CurrentUser.users);
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
-            for (User user : users) {
-                if (user.Email.equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    if (user.Password.equals(mPassword)) {
-                        CurrentUser.setUser(user);
+                for (User user : CurrentUser.users) {
+                    if (user.Email.equals(mEmail)) {
+                        // Account exists, return true if the password matches.
+                        if (user.Password.equals(mPassword)) {
+                            CurrentUser.setUser(user);
+                            i = 0;
+                            return true;
+                        }
                         i = 0;
-                        return true;
+                        return false;
+                    } else {
+                        i = 2;
+                        return false;
                     }
-                    i = 0;
-                    return false;
-                } else {
-                    i = 2;
                 }
+                return false;
+            } else {
+                i = 3;
+                return false;
             }
-            return false;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            if (i == 2) {
-                mEmailView.setError(getString(R.string.error_invalid_email));
+            if(i==3){
+                Toast.makeText(getBaseContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
+            }
+            else if (i == 2) {
+                mEmailView.setError("Email address not found");
                 mEmailView.requestFocus();
             } else if (success) {
-                Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
                 CurrentUser.setLogged(true);
                 finish();
                 goToProfile(View2);
@@ -377,6 +386,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void gotoMain(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
 
