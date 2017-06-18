@@ -33,6 +33,22 @@ public class EventsActivity extends AppCompatActivity
         setContentView(R.layout.activity_events);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
         if (!CurrentUser.getUser().NickName.equals("ADMIN")){
             CurrentUser.trimEvents();
         }
@@ -54,19 +70,32 @@ public class EventsActivity extends AppCompatActivity
         ListView list = (ListView) findViewById(R.id.events_ListView);
 
         list.setAdapter(adapter);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setItemIconTintList(null);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!CurrentUser.getUser().NickName.equals("ADMIN")){
+            CurrentUser.trimEvents();
+        }
 
+        EventCompetition[] li;
+
+        if (!CurrentUser.events.isEmpty()) {
+            li = new EventCompetition[CurrentUser.events.size()];
+            for (int i = 0; i < CurrentUser.events.size(); i++) {
+
+                li[i] = CurrentUser.events.get(i);
+            }
+        } else {
+            li = new EventCompetition[CurrentUser.users.size()];
+        }
+
+        ArrayAdapter<Object> adapter = new EventAdapter(this, li);
+
+        ListView list = (ListView) findViewById(R.id.events_ListView);
+
+        list.setAdapter(adapter);
+    }
 
 
     @Override
