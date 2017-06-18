@@ -346,7 +346,11 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             // TODO: attempt authentication against a network service.
             if (isNetworkAvailable()) {
                 try {
-                    FireBaseConnection.LoadFromDB(CurrentUser.users);
+                    if(FireBaseConnection.isLoggedForFirstTime){
+                        FireBaseConnection.LoadFromDB(CurrentUser.users);
+                        FireBaseConnection.getEvents(CurrentUser.events);
+                        FireBaseConnection.isLoggedForFirstTime = false;
+                    }
                     // Simulate network access.
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
