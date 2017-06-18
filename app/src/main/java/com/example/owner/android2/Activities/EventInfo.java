@@ -3,11 +3,14 @@ package com.example.owner.android2.Activities;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ButtonBarLayout;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.owner.android2.Event.EventCompetition;
 import com.example.owner.android2.R;
+import com.example.owner.android2.User.CurrentUser;
 
 public class EventInfo extends AppCompatActivity {
     EventCompetition event;
@@ -28,6 +31,8 @@ public class EventInfo extends AppCompatActivity {
 
         names.setText(event.Name);
         slots.setText(String.valueOf(getNumberOfParticipants()+"/"+event.Slots));
+        Button signup = (Button) view.findViewById(R.id.event_signup);
+        signup.setTag(event);
         if (event.isActive & event.isStarted){
             status.setTextColor(Color.GREEN);
             status.setText("Active");
@@ -73,5 +78,10 @@ public class EventInfo extends AppCompatActivity {
 
         }
         return participants;
+    }
+
+    public void registerUserForEvent(View view) {
+        EventCompetition eventSignup =(EventCompetition) view.getTag();
+        CurrentUser.setEvent(eventSignup);
     }
 }

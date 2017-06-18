@@ -50,7 +50,7 @@
             android:id="@+id/button2"
             android:layout_width="80dp"
             android:layout_height="40dp"
-            android:text="Button"
+            android:text="More"
             android:textColor="@android:color/white"
             tools:text="More"
             android:layout_alignBottom="@+id/imageButton2"
