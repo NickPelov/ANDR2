@@ -90,8 +90,11 @@ public class EventInfo extends AppCompatActivity {
             FireBaseConnection.setEventParticipant(eventSignup,number);
             Intent intent = new Intent(this, ProfileActivity2.class);
             startActivity(intent);
+            Toast.makeText(this, "You are signed up for "+eventSignup.Name, Toast.LENGTH_LONG).show();
         }
         else{
+            Intent intent = new Intent(this, EventsActivity.class);
+            startActivity(intent);
             Toast.makeText(this, "You are already signed up for an event", Toast.LENGTH_LONG).show();
         }
     }
