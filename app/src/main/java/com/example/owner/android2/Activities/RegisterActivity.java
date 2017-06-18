@@ -390,7 +390,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 mNickNameView.setError("Nick name already taken");
                 mNickNameView.requestFocus();
             } else {
-                FireBaseConnection.pushNewInstanceUser(mName + i, mEmail + i, mPassword, mNick + i);
+                FireBaseConnection.pushNewInstanceUser(mName, mEmail, mPassword, mNick);
                 finish();
                 Toast.makeText(getBaseContext(), "Success", Toast.LENGTH_LONG).show();
                 gotoLogin(View2);
