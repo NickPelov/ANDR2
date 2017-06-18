@@ -61,24 +61,14 @@ public class EventAdapter extends ArrayAdapter<Object> {
             eventlocation.setLatitude(event.location.Latitude);
             int distance = (int) eventlocation.distanceTo(userlocation);
             String slots = registeredParticipants + "/" + event.Slots;
-
             if(distance>1000){
                 distanceAway = String.format(Locale.ENGLISH,"%,d", distance/1000) + "km away";
             }else{
                 distanceAway = String.format(Locale.ENGLISH,"%,d", distance) + "m away";
             }
-
-
-
-
-
             distance_txt.setText(distanceAway);
             slots_txt.setText(slots);
         }
-
-
-
-
         return view;
 
     }

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.owner.android2.User.CurrentUser;
 import com.example.owner.android2.Adapters.EventAdapter;
@@ -61,15 +62,16 @@ public class EventsActivity extends AppCompatActivity
 
                 li[i] = CurrentUser.events.get(i);
             }
+            ArrayAdapter<Object> adapter = new EventAdapter(this, li);
+
+            ListView list = (ListView) findViewById(R.id.events_ListView);
+
+            list.setAdapter(adapter);
         } else {
-            li = new EventCompetition[CurrentUser.users.size()];
+            Toast.makeText(this,"No events near you",Toast.LENGTH_LONG).show();
         }
 
-        ArrayAdapter<Object> adapter = new EventAdapter(this, li);
 
-        ListView list = (ListView) findViewById(R.id.events_ListView);
-
-        list.setAdapter(adapter);
     }
     @Override
     protected void onResume() {
@@ -132,12 +134,7 @@ public class EventsActivity extends AppCompatActivity
         } else if (id == R.id.events_option) {
             gotoEvents(view2);
             finish();
-        } else if (id == R.id.settings_option) {
-            gotoSettings(view2);
-            finish();
-        } else if (id == R.id.achievements_option) {
-            gotoAchiv(view2);
-            finish();
+
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);
             finish();

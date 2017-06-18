@@ -133,7 +133,7 @@ public class ProfileActivity2 extends AppCompatActivity
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_icon2)
                 .setContentTitle("There is a new event for " + slot + " people")
-                .setContentText("it is " + new DecimalFormat("#.##").format(distance) + "km away!");
+                .setContentText("it is " + new DecimalFormat("#.##").format(distance/1000) + "km away!");
         Intent resultIntent = new Intent(this, EventsActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(EventsActivity.class);
@@ -204,12 +204,6 @@ public class ProfileActivity2 extends AppCompatActivity
             finish();
         } else if (id == R.id.events_option) {
             gotoEvents(view2);
-            finish();
-        } else if (id == R.id.settings_option) {
-            gotoSettings(view2);
-            finish();
-        } else if (id == R.id.achievements_option) {
-            gotoAchiv(view2);
             finish();
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);

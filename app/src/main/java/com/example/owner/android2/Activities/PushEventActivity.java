@@ -132,12 +132,6 @@ public class PushEventActivity extends AppCompatActivity
         } else if (id == R.id.events_option) {
             gotoEvents(view2);
             finish();
-        } else if (id == R.id.settings_option) {
-            gotoSettings(view2);
-            finish();
-        } else if (id == R.id.achievements_option) {
-            gotoAchiv(view2);
-            finish();
         } else if (id == R.id.profile_option) {
             gotoProfile(view2);
             finish();
