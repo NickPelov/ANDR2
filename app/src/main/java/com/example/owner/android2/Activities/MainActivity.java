@@ -98,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
                 FireBaseConnection.isLoggedForFirstTime=false;
             }
         }
+        else{
+            Toast.makeText(getBaseContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
+        }
     }
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
