@@ -79,8 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Create the LocationRequest object
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(1000)
-                .setFastestInterval(100);
+                .setInterval(6000)
+                .setFastestInterval(3000);
 
         Button bt1 = (Button) findViewById(R.id.buttonBack);
         Button btnRefersh = (Button) findViewById(R.id.buttonForceRefresh);
@@ -406,11 +406,12 @@ class LongOperation extends AsyncTask<Object, Object, Void> {
         Location user2location = new Location("event");
         userlocation.setLatitude(CurrentUser.getUser().location.Latitude);
         userlocation.setLongitude(CurrentUser.getUser().location.Longitude);
+        String me = CurrentUser.getUser().NickName;
         for (User user:CurrentUser.users){
             user2location.setLongitude(user.location.Longitude);
             user2location.setLatitude(user.location.Latitude);
             int distance = (int) user2location.distanceTo(userlocation);
-            if (distance<100){
+            if (distance<100 && !me.equals(user.NickName)){
                 Toast.makeText(vibrator, "Someone is near", Toast.LENGTH_SHORT).show();
             }
         }
