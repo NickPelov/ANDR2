@@ -2,12 +2,15 @@ package com.example.owner.android2.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.owner.android2.FireBaseConnection;
 import com.example.owner.android2.User.CurrentUser;
 import com.example.owner.android2.R;
 import com.facebook.CallbackManager;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Connect();
     }
 
     //loading the map
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Register(View view) {
+        Connect();
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
         finish();
@@ -54,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void loadLogin(View view) {
+        Connect();
         Intent innt = new Intent(this, LoginActivity.class);
         startActivity(innt);
         finish();
@@ -61,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        super.onResume();  // Always call the superclass method first
+        super.onResume();
+        Connect();
+        // Always call the superclass method first
         if (CurrentUser.getLogged()) {
             Intent intent = new Intent(this, ProfileActivity2.class);
             startActivity(intent);
@@ -81,5 +89,20 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                     }
                 }).create().show();
+    }
+    private void Connect(){
+        if (isNetworkAvailable()) {
+            if (FireBaseConnection.isLoggedForFirstTime) {
+                FireBaseConnection.LoadFromDB(CurrentUser.users);
+                FireBaseConnection.getEvents(CurrentUser.events);
+                FireBaseConnection.isLoggedForFirstTime=false;
+            }
+        }
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
